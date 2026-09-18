@@ -168,6 +168,6 @@ change, reason about how it ripples outward.
 
 Scaffold `tests/` include `unitTests.R` + `testthat/`; build small in-memory inputs, call
 `simInit()`/`spades()` (or a helper directly via `sim$.mods$<Module>$<fn>`), and assert on
-the returned `simList`. See `spades-testing` for patterns.
+the returned `simList`. See `testing` for patterns.
 
 <!--Note to Ceres: request input from Eliot and Alex.-->

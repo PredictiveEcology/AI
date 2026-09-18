@@ -53,8 +53,8 @@ cheat-sheet. In brief:
 | Build, run, refactor, or debug a module or simulation; code against the toolkit | `spades-module-development` |
 | Understand or edit a module's `.R` structure, metadata, or events | `spades-module-anatomy` |
 | Develop or maintain the SpaDES toolkit packages themselves (APIs, NAMESPACE, devtools, versioning) | `spades-package-development` |
-| Write unit or integration tests | `spades-testing` |
-| Write comments, module metadata `desc` fields, roxygen2, NEWS | `spades-code-documentation` |
+| Write unit or integration tests | `testing` |
+| Write comments, module metadata `desc` fields, roxygen2, NEWS | `code-documentation` |
 | Author a per-module `.Rmd` manual | `spades-module-manuals` |
 
 Always prefer inspecting the actual files (module `.R`, `DESCRIPTION`, `tests/`) and the

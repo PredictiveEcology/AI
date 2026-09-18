@@ -58,11 +58,11 @@ The SpaDES `spades-*` skills below come from the sister repo `SpaDES.ai` and are
 | SpaDES mental model / toolkit orientation (which `spades-*` skill applies) | `spades-overview` |
 | Understand/edit a module's `.R` structure, metadata, events | `spades-module-anatomy` |
 | Build, run, or debug a module or simulation (`simInit()`/`spades()`, `newModule()`) | `spades-module-development` |
-| Write unit or integration tests | `landr-testing` |
+| Write unit or integration tests | `testing` |
 | Maintain LandR/LandR.CS/fireSenseUtils packages (NAMESPACE, devtools, versioning) | `landr-package-maintenance` |
 | Author LandR module `.Rmd` manuals or multi-module bookdown manuals | `landr-manuals` |
 | Author a SpaDES module's own `.Rmd` manual | `spades-module-manuals` *(placeholder — until written, use `landr-manuals`)* |
-| Write comments, module metadata `desc` fields, roxygen2, NEWS | `landr-code-documentation` |
+| Write comments, module metadata `desc` fields, roxygen2, NEWS | `code-documentation` |
 
 Always prefer inspecting the actual files (module `.R`, `DESCRIPTION`, `tests/`) before
 acting — the ecosystem is large and modules vary.

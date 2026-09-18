@@ -1,6 +1,6 @@
 ---
 name: landr-package-maintenance
-description: Maintaining the accessory R packages in the LandR ecosystem — LandR, LandR.CS, and fireSenseUtils. Covers DESCRIPTION and dependency management, NAMESPACE (roxygen2-generated), the devtools workflow (document, load_all, test, check), testthat suites, and version and NEWS.md bumps. Use when adding or changing exported functions, updating dependencies, running R CMD check, or releasing a new package version. For writing the roxygen2 blocks themselves, use landr-code-documentation.
+description: Maintaining the accessory R packages in the LandR ecosystem — LandR, LandR.CS, and fireSenseUtils. Covers DESCRIPTION and dependency management, NAMESPACE (roxygen2-generated), the devtools workflow (document, load_all, test, check), testthat suites, and version and NEWS.md bumps. Use when adding or changing exported functions, updating dependencies, running R CMD check, or releasing a new package version. For writing the roxygen2 blocks themselves, use code-documentation.
 metadata:
   ecosystem: LandR
   version: "1.0"
@@ -41,7 +41,7 @@ check("LandR")        # full R CMD check
 ## Adding or changing exported functions
 
 1. Write the function in `R/` with a roxygen2 block including `@export`
-   (see `landr-code-documentation`).
+   (see `code-documentation`).
 2. `document()` to update NAMESPACE + `man/`.
 3. Add/adjust tests under `tests/testthat/`.
 4. `test()` then `check()`.
