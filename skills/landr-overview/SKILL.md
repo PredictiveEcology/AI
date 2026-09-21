@@ -59,6 +59,7 @@ The SpaDES `spades-*` skills below come from the sister repo `SpaDES.ai` and are
 | Understand/edit a module's `.R` structure, metadata, events | `spades-module-anatomy` |
 | Build, run, or debug a module or simulation (`simInit()`/`spades()`, `newModule()`) | `spades-module-development` |
 | Write unit or integration tests | `testing` |
+| Find an existing module, or work out whether a set of modules fits together | `spades-finding-modules` |
 | A module's CI is red, or you are preparing a module PR | `spades-module-ci` |
 | Run replicates, compare scenarios, sweep parameters, or test whether a change alters results | `spades-experiments` |
 | Maintain LandR/LandR.CS/fireSenseUtils packages (NAMESPACE, devtools, versioning) | `landr-package-maintenance` |

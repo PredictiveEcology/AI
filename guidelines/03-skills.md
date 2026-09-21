@@ -43,6 +43,7 @@ toolkit-specific.
 | `spades-overview` | SpaDES toolkit orientation and routing. |
 | `spades-module-anatomy` | Structure/editing of a SpaDES module's `.R`, metadata, events. |
 | `spades-module-development` | General dev workflow: `newModule()`, coding against the toolkit, running/debugging a `simList`. |
+| `spades-finding-modules` | The public module catalogue (SpaDES-modules wiki), fetching modules with `setupProject()`, and judging whether a set of modules works together. |
 | `spades-module-ci` | Getting a module through CI: the shared `testthat-module` / `render-module-rmd` / `pkgdown-module` workflows, `convertToPackage()` packaging traps, `reqdPkgs` version floors. |
 | `spades-experiments` | Running a simulation many times: replicates, scenarios, parameter sweeps, cluster runs, and controlled before/after comparisons. |
 | `spades-module-manuals` | Per-module SpaDES manuals. **Placeholder, not yet written** — use `landr-manuals` for LandR module manuals meanwhile. |
