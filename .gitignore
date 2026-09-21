@@ -1,0 +1,2 @@
+# Machine-specific local instances of guidelines (see guidelines/00-user-setup.md)
+*.local.md
