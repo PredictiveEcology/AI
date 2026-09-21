@@ -1,27 +1,26 @@
 # AI
 
 Shared conventions, guidelines, and skills for AI-assisted development across
-PredictiveEcology's projects. It currently covers the **LandR** and **SpaDES**
-ecosystems — forest and forest-disturbance simulation software — and is intended to grow
-to cover other team conventions (e.g. data visualization, report writing) as they're
-added.
+PredictiveEcology's projects. 
 
-This repository is the team's single source for how to work with a
-Posit-Assistant-enabled Claude model on LandR modules, SpaDES toolkit packages, and
+This repository is the team's source for how to work with a
+Posit-Assistant-enabled Claude model on SpaDES toolkit packages, SpaDES applications
+such as the LandR forest landscape model and related models, and other
 related code. It holds three things:
+
 
 - **`guidelines/`** — path-agnostic setup and convention docs. Start at
   [`guidelines/00-user-setup.md`](guidelines/00-user-setup.md); the reference docs are
   `00b-user-guidelines.md` (working *with* the assistant), `01-project-setup.md`
   (project folder + repo set), `02-guardrails.md` (permissions, hooks, `AGENTS.md`), and
   `03-skills.md` (getting, creating, and loading skills).
+- **`skills/`** — the shared team skills: ecosystem-agnostic (`testing`,
+  `code-documentation`), LandR-specific (`landr-*`), and SpaDES-toolkit-specific
+  (`spades-*`). These are the primary source; get them before writing new ones.
 - **`AGENTS.md`** — a template project-memory file to copy into a workspace root and
   adapt (paths, repository set) to that workspace. It includes a LandR section, a SpaDES
   toolkit section, and shared conventions common to both — include only what your
   workspace needs.
-- **`skills/`** — the shared team skills: ecosystem-agnostic (`testing`,
-  `code-documentation`), LandR-specific (`landr-*`), and SpaDES-toolkit-specific
-  (`spades-*`). These are the primary source; get them before writing new ones.
 
 **This repo is documentation + config — you don't run it.** It sets up your workspace and
 your assistant to work on the *real* LandR module, SpaDES toolkit package, and other
@@ -29,11 +28,13 @@ project repos.
 
 ## Which parts apply to me?
 
+- Working on the **SpaDES toolkit** itself → the SpaDES toolkit section of `AGENTS.md`,
+  the `spades-*` skills, plus the shared skills.
+
 - Working on **LandR** modules/packages → the LandR section of `AGENTS.md`, the
   `landr-*` skills, plus the shared skills and the SpaDES toolkit skills (used by default
   in LandR work).
-- Working on the **SpaDES toolkit** itself → the SpaDES toolkit section of `AGENTS.md`,
-  the `spades-*` skills, plus the shared skills.
+
 - Everything in `guidelines/` applies regardless of ecosystem.
 
 ## Prerequisites
@@ -41,7 +42,7 @@ project repos.
 Software to have installed before you start (that's all — no R versions or package lists
 to worry about; each ecosystem's own tooling and the assistant handle package setup):
 
-- **Positron** with **Posit Assistant** enabled.
+- An AI-powered coding interface. This guide assumes using **Positron** with **Posit Assistant** enabled and Anthropic Claude models.
 - **R**.
 - **git**, and a **GitHub** account — recommended for cloning and contributing, but not
   required: you can also download this repo (and the LandR/SpaDES repos) as a zip from
@@ -57,11 +58,11 @@ to worry about; each ecosystem's own tooling and the assistant handle package se
 4. Use [`guidelines/00b-user-guidelines.md`](guidelines/00b-user-guidelines.md) for
    day-to-day working habits.
 
-Most of steps 2–3 can be done by asking the assistant — see the prompt examples in
-[`guidelines/00-user-setup.md`](guidelines/00-user-setup.md). The `00*` guidelines are
-written for you; the numbered `01`–`03` docs are reference the assistant consults. You
+Most of steps 2–3 in [`guidelines/00-user-setup.md`](guidelines/00-user-setup.md) can be done by asking the assistant — see the prompt examples.
+
+The numbered `01`–`03` guideline  are reference documents for the AI assistant. You
 remain responsible for the instructions and content the assistant is given, so read the
-`01`–`03` docs too — they define what the assistant is instructed to do on your behalf.
+`01`–`03` documentation too — they define what the assistant is instructed to do on your behalf.
 
 > **You are responsible for what the assistant does on your behalf** — the code it writes,
 > the changes it makes, and the instructions it follows. Review its diffs and results, and
@@ -74,6 +75,8 @@ Clone or sync this repo's `skills/` into a local skills path so Posit Assistant
 discovers them, e.g. `~/.agents/skills` or `~/.posit/assistant/skills/`. See
 [`guidelines/03-skills.md`](guidelines/03-skills.md) for the full skill catalog and
 precedence rules.
+
+Alternatively, point your AI assistant to this repo and the `skills/` folder.
 
 ## Shared vs local
 
