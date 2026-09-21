@@ -6,7 +6,7 @@ PredictiveEcology's projects.
 This repository is the team's source for how to work with a
 Posit-Assistant-enabled Claude model on SpaDES toolkit packages, SpaDES applications
 such as the LandR forest landscape model and related models, and other
-related code. It holds three things:
+related code. It holds four things:
 
 
 - **`guidelines/`** — path-agnostic setup and convention docs. Start at
@@ -17,6 +17,11 @@ related code. It holds three things:
 - **`skills/`** — the shared team skills: ecosystem-agnostic (`testing`,
   `code-documentation`), LandR-specific (`landr-*`), and SpaDES-toolkit-specific
   (`spades-*`). These are the primary source; get them before writing new ones.
+- **`AGENTS-rules/`** — short, single-topic behavioural rules, one per file, to take or
+  leave individually. `AGENTS.md` is always part team convention and part personal
+  working style, so the unit you adopt is a rule, not a whole file. Start at
+  [`AGENTS-rules/README.md`](AGENTS-rules/README.md), which also explains how a rule
+  differs from a guideline and from a skill.
 - **`AGENTS.md`** — a template project-memory file to copy into a workspace root and
   adapt (paths, repository set) to that workspace. It includes a LandR section, a SpaDES
   toolkit section, and shared conventions common to both — include only what your

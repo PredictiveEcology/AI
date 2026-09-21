@@ -103,6 +103,14 @@ Keep the body under ~500 lines; move detail into `references/` for progressive
 disclosure. Use the `/create-skill` command for interactive guidance, or copy an
 existing skill as a template.
 
+## Rule or skill?
+
+Skills load **on demand**, when a task matches the `description`. A behavioural rule
+that must hold on every turn has no trigger, so it does not belong in a skill — it goes
+in `AGENTS.md`, or in a SessionStart hook for user-wide reach. Two tests: can you name
+the situation that should load it (skill), and does anything break if nobody thinks to
+look it up (rule)? See [`AGENTS-rules/README.md`](../AGENTS-rules/README.md).
+
 ## Creating a new skill
 
 1. **Check the shared skills first** (see above). Create a new skill only when the task
