@@ -54,6 +54,8 @@ cheat-sheet. In brief:
 | Understand or edit a module's `.R` structure, metadata, or events | `spades-module-anatomy` |
 | Develop or maintain the SpaDES toolkit packages themselves (APIs, NAMESPACE, devtools, versioning) | `spades-package-development` |
 | Write unit or integration tests | `testing` |
+| A module's CI is red, or you are preparing a module PR | `spades-module-ci` |
+| Run replicates, compare scenarios, sweep parameters, or test whether a change alters results | `spades-experiments` |
 | Write comments, module metadata `desc` fields, roxygen2, NEWS | `code-documentation` |
 | Author a per-module `.Rmd` manual | `spades-module-manuals` |
 

@@ -1,9 +1,9 @@
 ---
 name: testing
-description: Writing and running tests for SpaDES modules, toolkit packages, and simulation model accessory packages (e.g. LandR/LandR.CS/fireSenseUtils) — both unit tests (a single module, event, or helper function) and integration tests (multi-module workflows). Covers the tests/unitTests.R + tests/testthat/ layout, building minimal in-memory rasters and data.tables, calling simInit()/spades(), reaching module-internal functions, and asserting on the returned simList. Use when the user asks to add, fix, or run tests for a module, simulation, or package.
+description: Writing and running tests for SpaDES modules, toolkit packages, and simulation model accessory packages (e.g. LandR/LandR.CS/fireSenseUtils) — both unit tests (a single module, event, or helper function) and integration tests (multi-module workflows). Covers the tests/unitTests.R + tests/testthat/ layout, building minimal in-memory rasters and data.tables, calling simInit()/spades(), reaching module-internal functions, and asserting on the returned simList. Use when the user asks to add, fix, or run tests for a module, simulation, or package. For the CI workflows that run module tests on a PR, use spades-module-ci.
 metadata:
   ecosystem: SpaDES, LandR
-  version: "1.0"
+  version: "1.1"
 ---
 
 # SpaDES / LandR testing
@@ -123,7 +123,47 @@ suite yet.
 
 - Module: source `tests/unitTests.R`, or `testthat::test_dir("<Module>/tests/testthat")`.
 - Package: `devtools::test("<Package>")`.
-- Always run from a context where the module's `reqdPkgs` (or the package's dependencies)
-  are installed; use `Require()` to load them.
+- Run from a context where the module's `reqdPkgs` (or the package's dependencies) are
+  installed; use `Require()` to load them.
+
+### Running against unreleased dependencies
+
+Modules and the packages they depend on usually change together, so a module's
+`reqdPkgs` often carries a floor — `PredictiveEcology/LandR@development (>= 1.2.0.9024)`
+— that the installed library does not meet yet. Do not install the development version
+into a shared library to make the tests run. Put it in a scratch library and prepend
+that:
+
+```r
+.libPaths(c("~/scratch-rlib", .libPaths()))
+Require::Require("PredictiveEcology/LandR@development", require = FALSE)
+```
+
+Delete the scratch library when the work is done. Two further points when running a
+module outside `simInit()`'s normal path:
+
+- **`spades.useRequire = FALSE` does not attach `reqdPkgs`.** It only stops SpaDES from
+  installing them. Module code that calls a package unqualified (e.g. `fpCompare`'s
+  `%>>%`) then fails. Attach what the module needs explicitly.
+- **`pkgload::load_all()` is not equivalent to an installed package.** It puts a
+  package's own imports on the search path, so a namespace problem in the code under
+  test can resolve anyway and the test passes locally while CI fails.
+
+### What CI runs
+
+A module PR is gated by `testthat-module`, which does not source the module: it
+converts it to an R package with `SpaDES.core::convertToPackage()` and runs
+`testthat::test_local()` on that. Tests can therefore pass locally and fail on GitHub
+for packaging reasons that have nothing to do with the assertions. A module with no
+`tests/testthat/test*.R` passes and reports it in the job summary, so a green check is
+not by itself evidence that tests ran. See `spades-module-ci`.
+
+Two habits that keep the suite honest under that conversion:
+
+- **Do not rely on another test file having attached a package.** `testthat` runs files
+  alphabetically, and a `library(data.table)` at the top of one file silently supplies
+  it to every file after. Check a suspect file on its own.
+- **Do not add `library()` calls to a test purely to make it pass.** If the module's own
+  namespace cannot find a function, that is the defect.
 
 <!--Note to Ceres: request input from Eliot and Alex.-->
