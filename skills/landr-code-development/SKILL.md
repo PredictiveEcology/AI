@@ -134,7 +134,10 @@ existing usage in the file you are editing.
 ### Messaging and errors
 
 - **`message()` for info, `warning()` for cautions, `stop()` for fatal** — and validate
-  inputs with `stop()` at the top of functions before expensive work.
+  inputs with `stop()` at the top of functions before expensive work. See
+  `spades-module-development` for the general tradeoffs between the three (what each does
+  during and after a run); **consult the user and state the tradeoff** before choosing one
+  over another, especially for warnings that could go unnoticed in a long batch/HPC run.
 - **Prefix messages with context** (module name, pixel group) for traceability across
   millions of pixels.
 - **Respect `LandR.verbose` for log verbosity.** Level semantics are still being pinned
@@ -171,6 +174,24 @@ LandR-specific conventions (general style and dependency rules are in
 
 - `cohortDefinitionCols` can diverge between modules; if a change could make module
   definitions of a cohort inconsistent, flag it to the user rather than proceeding.
+
+## `Biomass_core` and its LANDIS-II ancestry
+
+`Biomass_core` was originally ported from the **LANDIS Biomass Succession Extension
+v3.2.1**, which itself runs on **LANDIS-II Core Model v6.0**. Before proposing any
+**mechanistic** change to `Biomass_core` (a change to what a growth/mortality/succession
+process actually computes, not a refactor/perf/doc change), thoroughly evaluate the
+original source first:
+
+- Extension source and its history: https://github.com/LANDIS-II-Foundation/Extension-Biomass-Succession
+- Core model source and its history: https://github.com/LANDIS-II-Foundation/Core-Model-v6
+
+The current logic and any deviations from the original C#/VB implementation are often only
+findable in **commit history**, not the latest code — check history, not just the default
+branch tip. Treat this as an extension of "process knowledge rests with the user" below:
+**consult the user carefully before implementing any mechanistic change**, present what the
+LANDIS-II source does, and confirm whether the intended change is a deliberate departure
+from that ancestry or should match it.
 
 ## Process knowledge rests with the user
 

@@ -99,6 +99,45 @@ names — the toolkit's functions change across versions.
 - Match the timestep: recurring-event intervals and per-step rates must be consistent with
   the module's `timeunit`.
 
+## Performance: events, modules, and overhead
+
+Both events and modules carry overhead (scheduling/dispatch for events; loading,
+`.inputObjects`, and dependency resolution for modules), so weigh **how many** of each a
+design needs, not just what each does:
+
+- **Give a module only the events it needs.** A module whose job is data preparation or
+  calibration (runs once, or a few times, to produce inputs for other modules) may need
+  only the `init` event — do not add recurring events, or split it into multiple modules,
+  out of habit or symmetry with process modules.
+- **Prefer fewer, well-chosen events over many fine-grained ones** when the extra events do
+  not correspond to a real scheduling need (e.g. a genuinely different timestep or
+  priority). Splitting logic into more events than necessary adds scheduling overhead
+  without a modeling benefit.
+- **Weigh splitting logic into more modules against the overhead of doing so** (each module
+  adds its own metadata, dependency resolution, and event-queue entries). Prefer more
+  modules when they represent genuinely separable, reusable, or independently-versioned
+  units of process logic; prefer fewer when the split is purely organizational.
+- These are performance/design tradeoffs, not correctness rules — when in doubt, discuss
+  the intended granularity with the user before restructuring events or module boundaries.
+
+## Messaging: `message()` vs `warning()` vs `stop()`
+
+- **`message()`** — informational, does not interrupt execution; use for routine progress
+  reporting during a simulation (e.g. "processing pixel group X of Y").
+- **`warning()`** — signals something questionable happened but the simulation continued;
+  visible during the run and collected at the end (or immediately with
+  `options(warn = 1)`). Use when an assumption was silently relaxed or a fallback was taken
+  that the user should know about.
+- **`stop()`** — halts execution immediately; use for conditions that make continuing
+  meaningless or unsafe (invalid inputs, broken invariants).
+- Each has different consequences **during** a run (does it stop the simulation? does it
+  interleave with other output?) and **after** a run (`warning()`s are easy to miss in long
+  batch/HPC runs unless captured; `stop()` aborts the whole run, which matters for
+  multi-hour landscape simulations). **When adding or changing one of these calls, briefly
+  state which you chose and why, and flag the tradeoff to the user** — especially whether a
+  `warning()` might go unnoticed in a long batch run where a `stop()` (or an upgraded
+  `message()`) would be safer, or vice versa.
+
 ## Memory-efficient coding
 
 Landscape simulations are memory-bound, and some common R idioms leak memory by silently

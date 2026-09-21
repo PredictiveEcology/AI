@@ -98,6 +98,20 @@ doEvent.`<Module>` <- function(sim, eventTime, eventType, debug = FALSE) {
   explicit priority variables at the top of `doEvent`.
 - Read/write params via `P(sim)$x` and `params(sim)$<Module>$x`.
 
+### Event scheduling rules
+
+- **`init` does not need to be scheduled explicitly** — `simInit()`/`spades()` always run it
+  first. Likewise **`.inputObjects` is never called explicitly**; it runs automatically
+  during `simInit()`.
+- **Only the `init` event may schedule other events for the first time.** Every other event
+  may only *reschedule itself* (or schedule a different event already running in the same
+  module's cycle) — `init` is the one place that must schedule the first instance of every
+  other event the module uses.
+- **A module can only schedule its own events.** `scheduleEvent(sim, ..., "<Module>", ...)`
+  must name the current module; scheduling another module's event breaks modularity (the
+  point of the `simList`-object contract is that modules interact only through shared
+  objects, never by reaching into each other's event queue).
+
 ### Event/Init helper functions
 
 Below `doEvent`, the file defines `Init()`, per-event functions, and small helpers. In
@@ -109,5 +123,11 @@ tests, access them as `sim$.mods$<Module>$<fn>` when they are not exported.
   reads/writes it, plus the module `.Rmd` and `data/CHECKSUMS.txt` if a data file changes.
 - Bump `version` in the metadata and add a `NEWS.md` entry for behavioral changes.
 - Use `newModule()` from `SpaDES.project`/`SpaDES.core` to scaffold a brand-new module.
+- **Keep accessory/helper functions that are not themselves called inside an event
+  function (i.e. not one of the cases in the `doEvent` `switch`) in the `R/` folder**,
+  rather than inline in `<Module>.R`. `<Module>.R` should hold the metadata, the dispatcher,
+  and the event functions the dispatcher calls directly; smaller helpers those event
+  functions call internally belong in `R/`. See `spades-module-development` for why (memory
+  efficiency of where closures are declared).
 - For coding style and dependency preferences (e.g. `data.table`, base pipe `|>`), see
   `spades-module-development`.
