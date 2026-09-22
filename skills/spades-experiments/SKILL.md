@@ -105,11 +105,14 @@ PSOCK is what it uses underneath for remote hosts. Swapping between the three ch
 one function call and the worker arguments (`cores` / `n_workers` / `sbatch_opts`);
 the rest of the driver script is unchanged.
 
-Useful shared arguments: `queue_path` (delete it to start over, keep it to resume),
-`runNameLabel` (how runs are named in logs and pane titles), `statusCalculate`
-(inspect outputs to report progress — `statusCalculate_LandR` is prebuilt), and
-`ss_id` (mirror the queue to a Google Sheet so a collaborator can watch; omit it and
-nothing touches Google).
+Useful shared arguments: `queue_path` (keep it to resume; use a new name to start
+over, because `df` is ignored when the queue file already exists), `runNameLabel` (how
+runs are named in logs and pane titles), and `ss_id` (mirror the queue to a Google
+Sheet so a collaborator can watch; omit it and nothing touches Google). With `ss_id`
+set, an existing sheet of the same name wins over the local file, so deleting
+`queue_path` alone does not start over; pass `forceLocalQueueToGS = TRUE` or pick a new
+name. `experimentTmux()` also takes `statusCalculate` (inspect outputs to report
+progress — `statusCalculate_LandR` is prebuilt).
 
 `?experiment_family` documents all five together, including why this is worth more
 than a loop of `Rscript -e` calls. Read it before building your own bookkeeping.

@@ -1,6 +1,6 @@
 ---
 name: spades-finding-modules
-description: Finding existing SpaDES modules and composing them into a project — the public module catalogue on the SpaDES-modules wiki (~280 modules across 17 subjects, with status and type markers), how to read those markers, fetching modules with SpaDES.project::setupProject(), and how to judge whether a set of modules will actually work together (shared simList object names, the raster/sp porting marker, reqdPkgs version floors, fit/predict pairs). Use when the user asks what modules exist, which module does a given job, how to start a project from existing modules, whether two modules are compatible, or how to add a module to a running project. For writing a new module use spades-module-development.
+description: Finding existing SpaDES modules and composing them into a project — the public module catalogue on the SpaDES-modules wiki (~180 modules across 16 subjects, with status and type markers), how to read those markers, fetching modules with SpaDES.project::setupProject(), and how to judge whether a set of modules will actually work together (shared simList object names, the raster/sp porting marker, reqdPkgs version floors, fit/predict pairs). Use when the user asks what modules exist, which module does a given job, how to start a project from existing modules, whether two modules are compatible, or how to add a module to a running project. For writing a new module use spades-module-development.
 metadata:
   ecosystem: SpaDES
   version: "1.0"
@@ -16,7 +16,7 @@ together.
 
 The list of known public modules is the
 [Modules list](https://github.com/PredictiveEcology/SpaDES-modules/wiki/Modules-list)
-wiki page in `PredictiveEcology/SpaDES-modules`: ~280 modules in 17 subject sections,
+wiki page in `PredictiveEcology/SpaDES-modules`: ~180 modules in 16 subject sections,
 each linked to its repository and credited to its authors.
 
 **Read the live page. Do not copy it into an answer as a cached list.** It is
@@ -45,7 +45,8 @@ Status:
 | ·N | number of public projects that list this module |
 
 What the module does: 📥 data, 🎯 parameterizing, ⏩ prediction, 🔁 simulation,
-📋 summary, 🔌 translator, 📚 library. Most modules carry more than one.
+📋 summary, 🔌 translator, 📚 library, ✅ validation, 🚧 in development (no signal
+found). Most modules carry more than one.
 
 Two markers are easy to misread. **⚪ does not mean broken** — it means nobody public
 is using it, which is common for a module written for one study. **🗄 plus a ·N above

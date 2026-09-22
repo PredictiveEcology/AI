@@ -142,9 +142,12 @@ Require::Require("PredictiveEcology/LandR@development", require = FALSE)
 Delete the scratch library when the work is done. Two further points when running a
 module outside `simInit()`'s normal path:
 
-- **`spades.useRequire = FALSE` does not attach `reqdPkgs`.** It only stops SpaDES from
-  installing them. Module code that calls a package unqualified (e.g. `fpCompare`'s
-  `%>>%`) then fails. Attach what the module needs explicitly.
+- **Outside `simInit()`, nothing attaches `reqdPkgs`.** `simInit()` attaches them
+  whether `spades.useRequire` is `TRUE` or `FALSE`; that option only decides whether
+  `Require` installs them first (`SpaDES.core/R/simulation-simInit.R:2080-2092`), and
+  `spades.loadReqdPkgs = FALSE` is what turns attaching off. Code that calls module
+  functions directly gets no attached packages, so an unqualified call (e.g.
+  `fpCompare`'s `%>>%`) fails. Attach what the module needs explicitly.
 - **`pkgload::load_all()` is not equivalent to an installed package.** It puts a
   package's own imports on the search path, so a namespace problem in the code under
   test can resolve anyway and the test passes locally while CI fails.

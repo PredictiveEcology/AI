@@ -16,8 +16,9 @@ group. With the usual `successionTimestep = 10`, new cohorts appear at age 11 an
 annually from there. This is the LANDIS-II behaviour that stops an explosion of age-1
 cohorts.
 
-**After disturbance.** `LandR::addCohorts()` sets `age := 1L` for post-disturbance
-cohorts (`LandR/R/cohorts.R:83`).
+**After disturbance.** `LandR::updateCohortData()` sets `age := 1L` for
+post-disturbance cohorts when the incoming table has no `age` column
+(`LandR/R/cohorts.R:83` on development).
 
 The consequence is the part people miss: **in an undisturbed run, no cohort is ever
 younger than `successionTimestep`.** Code that acts only on younger cohorts has nothing

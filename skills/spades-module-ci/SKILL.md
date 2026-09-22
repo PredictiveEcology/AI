@@ -1,6 +1,6 @@
 ---
 name: spades-module-ci
-description: Getting a SpaDES module through continuous integration and into a merged PR — the three shared reusable workflows (testthat-module, render-module-rmd, pkgdown-module) from PredictiveEcology/actions, how convertToPackage() turns a module into an R package for testing, the packaging traps that pass locally and fail in CI (@importFrom suppressing the blanket @import, Collate, helper naming), reqdPkgs version floors that redden a module until its dependency package merges, and how to reproduce a CI failure on your own machine. Use when a module's CI is red, when adding CI to a module, when a module test passes locally but not on GitHub, or when preparing a module PR for review. For writing the tests themselves use testing; for module structure use spades-module-anatomy.
+description: Getting a SpaDES module through continuous integration and into a merged PR — the three shared reusable workflows (testthat-module, render-module-rmd, pkgdown-module) from PredictiveEcology/actions, how convertToPackage() turns a module into an R package for testing, the packaging traps that pass locally and fail in CI (@importFrom suppressing the blanket @import, helper naming), reqdPkgs version floors that redden a module until its dependency package merges, and how to reproduce a CI failure on your own machine. Use when a module's CI is red, when adding CI to a module, when a module test passes locally but not on GitHub, or when preparing a module PR for review. For writing the tests themselves use testing; for module structure use spades-module-anatomy.
 metadata:
   ecosystem: SpaDES
   version: "1.0"
@@ -67,22 +67,22 @@ every "passes locally, fails in CI" case traces to that conversion. The traps ar
    CI with an *installed* SpaDES.core in a scratch library — recipe in
    `references/reproducing-module-ci.md`.
 
-3. **A new `R/*.R` file must be in `Collate`.** `R CMD INSTALL` refuses a package with
-   an R file the `Collate` field does not list. Adding a helper file without updating
-   `DESCRIPTION` fails CI and nothing else.
+3. **A module helper may not be named with the module's own prefix.** `simInit()` stops
+   with "still uses the old way of function naming"
+   (`SpaDES.core/R/simulation-parseModule.R:310`). Rename the helper.
 
-4. **A module helper may not be named with the module's own prefix.** SpaDES rejects
-   it. Rename the helper.
-
-5. **`[skip-ci]` in the head commit message skips the whole job**, and a module with
+4. **`[skip-ci]` in the head commit message skips the whole job**, and a module with
    no `tests/testthat/test*.R` *passes* and says so in the job summary. A green check
    is not evidence that tests ran; read the summary.
 
-6. **Red CI right after a dependency merges is usually a stale run, not a defect.**
+5. **Red CI right after a dependency merges is usually a stale run, not a defect.**
    `reqdPkgs` pins like `PredictiveEcology/LandR@development (>= 1.2.0.9024)` are
    version floors. A run that started before that LandR version existed installs the
    older one and fails with "the packages ... are required". Re-run the job before
-   investigating anything.
+   investigating anything. A re-run installs dependency packages afresh, so it sees the
+   merged version. It does not see a change to the PR's own base branch (it replays the
+   old merge commit) or to the shared workflow in `actions`; for those, push a commit or
+   close and reopen the PR.
 
 ## When a module PR is red
 
@@ -92,7 +92,7 @@ Work in this order; each step is cheap and rules out a whole class.
    dependency floor is unmet — merge or wait for the dependency package, then re-run.
 2. Re-run the job once. Transient download failures are real and common.
 3. Check whether the failure is in `Run tests` or earlier. Earlier means packaging
-   (imports, `Collate`, documents), not your test.
+   (imports, documents), not your test.
 4. Only then reproduce locally, against an installed SpaDES.core
    (`references/reproducing-module-ci.md`).
 

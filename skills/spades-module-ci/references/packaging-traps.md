@@ -33,17 +33,21 @@ is unresolved at install time.
 
 The same applies to any package in `reqdPkgs`, not just data.table.
 
-## Collate
+## Collate is a package trap, not a module one
 
-`R CMD INSTALL` refuses a package whose `R/` holds a file the `Collate` field does not
-list. A new helper file therefore needs a `DESCRIPTION` update in the same commit.
-Nothing in a local `source()`-based workflow notices this.
+`convertToPackage()` writes a fresh `DESCRIPTION` on every run and never writes a
+`Collate` field (`SpaDES.core/R/DESCRIPTIONfromModule.R:188-225`), so a new module
+`R/*.R` file needs no `DESCRIPTION` change. The trap is real in packages that carry an
+explicit `Collate`, such as LandR: there `R CMD INSTALL` fails with "files in R missing
+from 'Collate'" until the new file is listed.
 
 ## Helper naming
 
-A module helper function whose name begins with the module's own name is rejected by
-SpaDES. Rename the function (e.g. `synthBurnMap` -> `drawBurnMap` in a module called
-`synthBurn`).
+A module helper function whose name begins with the module's own name makes `simInit()`
+stop with "still uses the old way of function naming"
+(`SpaDES.core/R/simulation-parseModule.R:310`). SpaDES reads the prefix as the retired
+`sim$<module>_<fn>` style. Rename the function (e.g. `synthBurnMap` -> `drawBurnMap` in
+a module called `synthBurn`).
 
 ## Documents
 
