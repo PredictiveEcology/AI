@@ -47,8 +47,35 @@ Three things to know before you trust the output:
 - **Caching is off by default** (`useCache = FALSE`), and should stay off. A cached
   run returns the same answer every time, which is the opposite of a replicate.
 - **Replicates differ because the model is stochastic**, not because a seed is set per
-  replicate. If you need a specific replicate to be reproducible, set the seed inside
-  the run (e.g. a module's `.seed` parameter keyed to the replicate number).
+  replicate. Every replicate gets the same parameters, so a module's `.seed` parameter
+  makes the replicates **identical** for that event: with `.seed = list(step = 123)`,
+  every replicate draws the same numbers in `step`, at every recurrence. Do not set
+  `.seed` on events you are replicating.
+
+### Replicating from a simList that has already run
+
+Replicate only what should vary. If `init` (or any event) has already run in the
+`simList` you pass in, its stochastic results are baked in, and every replicate starts
+from the same draw. On SpaDES.core 3.2.0 and SpaDES.project 1.2.0, `experiment()` and
+`experiment2()` give the replicates different random streams after that point, but all
+of them share the draws already made. Older versions were worse: every replicate was
+identical, because the seed set during `init` carried forward to all of them.
+
+When some modules should run once and the rest should be replicated, run the first
+group on its own and start a fresh `simList` for the second:
+
+```r
+## run once: the modules whose outputs every replicate should share
+simA <- simInitAndSpades(times = times, modules = c("A", "B", "C"), ...)
+
+## replicate: a new simList for the rest, fed the shared outputs as objects
+simD <- simInit(times = times, modules = c("D", "E", "F"),
+                objects = mget(c("objFromA", "objFromB"), envir(simA)), ...)
+sims <- experiment2(simD, replicates = 10)
+```
+
+Check that the replicates really differ before trusting a spread of results: compare
+one stochastic output across two replicates.
 
 ## Vary something, not just the seed
 
