@@ -58,11 +58,23 @@ Replicate only what should vary. If `init` (or any event) has already run in the
 `simList` you pass in, its stochastic results are baked in, and every replicate starts
 from the same draw. On SpaDES.core 3.2.0 and SpaDES.project 1.2.0, `experiment()` and
 `experiment2()` give the replicates different random streams after that point, but all
-of them share the draws already made. This was checked by running `init` with
-`simInit()` + `spades(events = "init")` and with `simInitAndSpades(events = "init")`,
-under sequential and multisession `future` plans. In 2022–23 all replicates were
-reported identical in this situation; that no longer reproduces, but if the stochastic
-output you care about is made in `init`, the effect is the same.
+of them share the draws already made. If the stochastic output you care about is made
+in `init`, the replicates will look identical.
+
+**Forked workers make every replicate identical.** A forked process starts with a copy
+of the parent's random-number state, so unless something reseeds each fork, all of them
+draw the same numbers. Tested on a simList whose `init` had already run:
+
+| How the replicates were run | Replicates |
+|---|---|
+| `experiment()` / `experiment2()` under any `future::plan()`, including `multicore` (forks) | differ — `future.seed = TRUE` gives each its own stream |
+| `parallel::mclapply()` with the default `mc.set.seed = TRUE` | differ |
+| `parallel::makeForkCluster()` + `clusterApply()`, or `mclapply(mc.set.seed = FALSE)` | **identical** |
+
+The old `SpaDES.experiment::experiment(cl = ...)` is the likely source of the identical
+replicates seen in 2022–23: it reseeded a cluster only when it made the cluster itself,
+and used a cluster you passed in as-is. If you run replicates with your own fork
+cluster, call `parallel::clusterSetRNGStream(cl)` first, or use `experiment2()`.
 
 When some modules should run once and the rest should be replicated, run the first
 group on its own and start a fresh `simList` for the second:
