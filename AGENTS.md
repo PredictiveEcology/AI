@@ -69,8 +69,8 @@ or deciding which skill applies.
 
 To learn model basics, read the `LandR-Manual/` bookdown (start at
 `LandR-Manual/index.Rmd`). The SpaDES toolkit itself is documented at
-https://spades.predictiveecology.org/ and, if present as a sibling, typically lives at
-`~/GitHub/SpaDES/*`.
+https://spades.predictiveecology.org/; its packages are usually cloned as sibling repos
+(`SpaDES.core/`, `reproducible/`, ...).
 
 ### Repository layout
 
@@ -95,18 +95,23 @@ rather than assuming the families below are exhaustive.
   section.
 - **Modules** (`<project>/<ModuleName>/`) — SpaDES module folders. Common core families:
   - `Biomass_*` — forest biomass succession (LANDIS-II–style): flagship `Biomass_core`,
-    data-prep (`Biomass_borealDataPrep`, `Biomass_speciesData`, `Biomass_sppEcoreg*`),
+    data-prep (`Biomass_borealDataPrep`, `Biomass_speciesData`),
     parameterization, fuels, regeneration, validation, summary.
-  - `fireSense_*` — fire modelling, organized as fit/predict pairs for ignition, escape,
-    spread, and size, plus data-prep and summary modules.
-  - Carbon: `LandR_CBM`, `LandRCBM*`, `LandRCSAM`.
+  - `fireSense_*` — fire modelling, organized as fit/predict pairs for ignition, escape
+    and spread, plus data-prep (`fireSense_dataPrepFit`/`Predict`), fire-regime units
+    (`fireSense_ELFs`), the burn module (`fireSense`) and `fireSense_summary`.
+  - Carbon: the CBM stack (`CBM_core`, `CBM_defaults`, `CBM_vol2biomass`, `CBM_dataPrep*`,
+    `spadesCBM`, the `CBMutils` package) and its LandR link (`LandRCBM`,
+    `LandRCBM_split3pools`).
 - **Accessory R packages:**
   - `LandR/` — core utilities: cohort-data helpers, species/ecoregion tables,
     kNN/CASFRI/Pickell layer loaders, assertions, study-area/map utilities. Imports
-    `SpaDES.core`, `SpaDES.tools`. roxygen2 docs; no test suite yet.
-  - `LandR.CS/` — climate-sensitive growth/mortality (`calculateClimateEffect`).
-  - `fireSenseUtils/` — fire data extraction, DEoptim optimization, helpers. Has a
-    small `tests/testthat/` suite.
+    `SpaDES.tools` and `reproducible` (`SpaDES.core` is only in Suggests). roxygen2 docs;
+    testthat suite in `tests/testthat/`.
+  - `LandR.CS/` — climate-sensitive growth/mortality (`calculateClimateEffect`). Lives in
+    a personal account (`ianmseddy/LandR.CS`), not PredictiveEcology.
+  - `fireSenseUtils/` — fire data extraction, DEoptim optimization, helpers. testthat
+    suite in `tests/testthat/`.
 - **`LandR-Manual/`** — bookdown manual aggregating per-module manuals.
 
 ### Module anatomy
@@ -123,16 +128,19 @@ Each module folder is consistent:
   the `init` event calls a function named `Init()`, but that name is not required.
 - `<Module>.Rmd` / `.md` / `.html` — module manual (bookdown-style, auto-generated badges).
 - `R/` — module-local helper functions.
-- `tests/unitTests.R` (entry point using `test_dir()`) + `tests/testthat/test-*.R`.
+- `tests/testthat/setup.R` + `tests/testthat/test-*.R` (template:
+  `examples/module-tests-setup.R` in `PredictiveEcology/actions`).
 - `data/` (with `CHECKSUMS.txt`), `citations/`, `citation.bib`, `figures/`,
   `NEWS.md`, `LICENSE`, `<Module>.Rproj`.
 
 ### Running & testing a module
 
 - Run: `simInit(times, params, modules = "<Module>", objects, paths)` then `spades(mySim)`.
-- Unit tests use `testthat`, driven from `tests/unitTests.R`; each test builds small
-  in-memory rasters/`data.table`s, calls `simInit()`/`spades()` (or a helper directly
-  via `sim$.mods$<Module>$<fn>`), and asserts on the result.
+- Unit tests use `testthat`. CI (`testthat-module` in `PredictiveEcology/actions`)
+  converts the module to a package with `SpaDES.core::convertToPackage()` and runs
+  `testthat::test_local()`, so tests can call module helpers directly. Each test builds
+  small in-memory rasters/`data.table`s, calls `simInit()`/`spades()` or a helper, and
+  asserts on the result.
 
 ### LandR conventions
 
@@ -182,34 +190,37 @@ a canonical list** — it varies by machine and changes over time. When instanti
 template, record the concrete table (repo, default branch, origin, upstream).
 
 Core toolkit repos you can expect to encounter: `SpaDES`, `SpaDES.core`, `SpaDES.tools`,
-`SpaDES.project`, `SpaDES.experiment`, `SpaDES.config`, `SpaDES.addins`, `SpaDES.docs`,
-`SpaDES.install`, `reproducible`, `Require`, `quickPlot`, plus accessory helpers such as
-`pemisc` and `fireSenseUtils`, the latter being specific to `fireSense` SpaDES modules.
-Note that default branches are mixed (`main` vs `master`), but new repositories should
-use `main`.
+`SpaDES.project`, `SpaDES.config`, `SpaDES.docs`, `reproducible`, `Require`, `quickPlot`,
+plus accessory helpers such as `fireSenseUtils`, the latter being specific to `fireSense`
+SpaDES modules. Legacy repos you may still meet: `SpaDES.experiment` (archived; moved to
+`SpaDES.project`), `SpaDES.install` (superseded by `setupProject()`/`Require`),
+`SpaDES.addins` and `pemisc` (no code changes since 2022). The active toolkit repos all
+use `main` as the default branch.
 
-**Branch/PR workflow:** for forked repos, branch off `upstream`'s default branch, push to
-`origin`, and PR to `upstream`.
+**Branch/PR workflow:** `main` is the release branch and `development` is where work
+lands. Branch off `development`, push to your fork (or `origin`), and PR to
+`development`, even though GitHub shows `main` as the default. Never merge `main` back
+into `development`.
 
 ### What each package does
 
 - **`SpaDES.core`** — the framework: `simInit()`, `spades()`, `defineModule()`,
   `defineParameter()`, `expectsInput()`/`createsOutput()`, `scheduleEvent()`, `P(sim)`,
   `mod`, and accessors (`time()`/`events()`/`objs()`).
-- **`SpaDES.tools`** — spatial algorithms: `spread()`/`spread2()`, `neighbourhood()`,
-  `splitRaster()`/`mergeRaster()`.
-- **`SpaDES.project`** — scaffolding + whole-project setup: `newModule()`, `newProject()`,
-  `setupProject()`.
-- **`SpaDES.experiment`** — parameter sweeps, replicates, multiple `simList`s.
+- **`SpaDES.tools`** — spatial algorithms: `spread()`/`spread2()`, neighbourhoods
+  (`adj()`, `rings()`, `cir()`), `splitRaster()`/`mergeRaster()`.
+- **`SpaDES.core`** also scaffolds: `newModule()`, `newProject()`.
+- **`SpaDES.project`** — whole-project setup (`setupProject()`) and experiments:
+  parameter sweeps, replicates, multiple `simList`s (`experiment()`, `experiment2()`,
+  `experimentTmux()`, ...), which replaced the archived `SpaDES.experiment`.
 - **`reproducible`** — `Cache()` (memoize expensive calls), `prepInputs()`
   (`preProcess()`/`postProcess()`) for reproducible data download/prep.
 - **`Require`** — reproducible, version/branch-aware package install/load.
 - **`quickPlot`** — fast modular plotting (`Plot()`, `clearPlot()`).
 - **`SpaDES`** — meta-package tying the toolkit together.
-- **`SpaDES.config`**, **`SpaDES.addins`**, **`SpaDES.install`**, **`SpaDES.docs`** —
-  configuration, RStudio addins, install helpers, documentation site.
-- **`pemisc`**, **`fireSenseUtils`**, **LandR** (the R package, not the model system) —
-  accessory helpers used in SpaDES-based projects.
+- **`SpaDES.config`**, **`SpaDES.docs`** — configuration, documentation helpers.
+- **`fireSenseUtils`**, **LandR** (the R package, not the model system) — accessory
+  helpers used in SpaDES-based projects.
 
 ### Mental model (cheat-sheet)
 
@@ -248,9 +259,10 @@ These are **defaults for LandR work** as well, obtained alongside the LandR skil
   are editing.
 - Use `Cache()`/`prepInputs()` for expensive or downloaded steps; be deliberate about
   caching stochastic events (generally do not cache them).
-- **Memory-efficient R:** avoid `Map()`/`do.call()`/the `apply` family (prefer `purrr`);
-  avoid `as.formula()` (captures its environment); don't define closures inside large
-  environments.
+- **No tidyverse dependencies** (`purrr`, `dplyr`, `tibble`, `magrittr`, ...) in the
+  toolkit or modules: use `data.table` and base R (`lapply`/`Map`/`vapply`).
+- **Memory-efficient R:** avoid `as.formula()` (captures its environment); don't define
+  closures inside large environments.
 - **Don't reformat or touch code unless asked.** By default, respect the existing coding
   style and tools as much as possible when changing code. Where reformatting, cleanup, or
   improvements beyond the user's request seem necessary, flag them, justify why, and get
@@ -258,8 +270,8 @@ These are **defaults for LandR work** as well, obtained alongside the LandR skil
   comments, change nothing else: keep existing function signatures, brace style (don't add
   braces to single-line `if`/`else`), operator spacing, and blank-line layout — only
   comment/`#'` lines should change.
-- **Edit `.R` files with `bash`/Python tools, never the `edit`/`write` tools.** Writing an
-  `.R` file through the editor tools can trigger format-on-save (Air-style) reformatting —
+- **In Posit Assistant, edit `.R` files with `bash`/Python tools, not the `edit`/`write`
+  tools.** Writing an `.R` file through its editor tools can trigger format-on-save (Air-style) reformatting —
   even when Air is nominally disabled — producing large unwanted whitespace/brace/argument
   diffs. Edit `.R` files via a `bash` heredoc or an in-place `python3` script instead, so
   the formatter never runs.

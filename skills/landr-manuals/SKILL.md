@@ -56,7 +56,10 @@ Editing guidance:
 
 ## 2. Multi-module manuals (bookdown, e.g. `LandR-Manual`)
 
-`LandR-Manual/` aggregates selected module manuals into one book.
+`PredictiveEcology/LandR-Manual` aggregates selected module manuals into one book. The
+module sources are not stored in it: the `landr-manual.yaml` workflow checks each module
+out (from `development`, set by `MODULE_REF`) into `modules/<Module>/`, and `build.R`
+generates the chapters with `SpaDES.docs::prepManualRmds()`.
 
 - `index.Rmd` — book front matter (`site: bookdown::bookdown_site`), preface, cover image,
   global bibliography/CSL.
@@ -67,26 +70,28 @@ Editing guidance:
   before_chapter_script: _common.R
   rmd_files:
     - index.Rmd
-    - modules/Biomass_core/Biomass_core2.Rmd
+    - _manual_rmds/Biomass_core2.Rmd
     - LandR-dataModulesForeword.Rmd
-    - modules/Biomass_speciesData/Biomass_speciesData2.Rmd
+    - _manual_rmds/Biomass_speciesData2.Rmd
     - ...
   ```
   The `rmd_files` list is the chapter order; forewords (`LandR-*Foreword.Rmd`) separate
   groups (data modules, validation modules).
-- `_output.yml` — output formats (gitbook/HTML, PDF via krantz.cls).
+- `_output.yml` — output formats (`bookdown::bs4_book` HTML; PDF via krantz.cls).
 - `_common.R` — shared setup run before each chapter.
-- Per-module chapter sources live under `LandR-Manual/modules/<Module>/` (note the `2`
-  suffix variants, e.g. `Biomass_core2.Rmd`, adapted from the module's own `.Rmd` for
-  inclusion in the book).
+- Chapter sources `_manual_rmds/<Module>2.Rmd` are generated from each module's own
+  `.Rmd` by `prepManualRmds()` during the build and deleted afterwards. Edit the module's
+  `.Rmd`, not these.
 
 ### Adding a module to `LandR-Manual`
 
-1. Create/adapt the module chapter under `LandR-Manual/modules/<Module>/`.
-2. Add its path to `rmd_files` in `_bookdown.yml` at the desired position (under the
-   appropriate foreword).
+1. Add an `actions/checkout` step for the module to `.github/workflows/landr-manual.yaml`
+   (path `modules/<Module>`).
+2. Add `_manual_rmds/<Module>2.Rmd` to `rmd_files` in `_bookdown.yml` at the desired
+   position (under the appropriate foreword).
 3. Ensure its bibliography entries are available to the book's global bib/CSL.
-4. Build with `bookdown::render_book()` (see `RUNME.R`); output goes to `docs/`.
+4. Build with `source("build.R")`, which runs `bookdown::render_book()`; output goes to
+   `docs/`.
 
 Keep heading levels consistent so chapters nest correctly, and reuse text references for
 figure/table captions that must survive PDF rendering.

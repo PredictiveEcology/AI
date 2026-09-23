@@ -11,7 +11,8 @@ queue, and module functions).
 
 - `simInit(times, params, modules, objects, paths)` — construct a `simList`; loads
   modules, runs `.inputObjects`, resolves dependencies.
-- `spades(sim, debug = FALSE)` — run events to the end time; returns the `simList`.
+- `spades(sim, debug = getOption("spades.debug"))` — run events to the end time; returns
+  the `simList`. The option defaults to `1`, which prints one line per event.
 - `defineModule(sim, list(...))` — module metadata (name, version, timeunit, reqdPkgs,
   parameters, inputObjects, outputObjects, documentation, citation).
 - `defineParameter(name, class, default, min, max, desc)` — declare a parameter.
@@ -32,8 +33,10 @@ queue, and module functions).
 ## reproducible — caching and data prep
 
 - `Cache(fn, ...)` — memoize a call by digest of its inputs; skip recompute if unchanged.
-- `prepInputs(url, targetFile, fun, ...)` — download + checksum + post-process a dataset.
-  Does not cache internally — wrap in `Cache()` when caching is wanted.
+- `prepInputs(targetFile, url, archive, ..., fun, ...)` — download + checksum +
+  post-process a dataset. Caches internally up to two levels (`useCache = 2`: the
+  download/load steps), but not `postProcess()`; wrap the whole call in `Cache()` to
+  cache all of it.
 - `preProcess()`, `postProcess()` — the download and spatial post-processing halves.
 
 ## Require — reproducible package management
@@ -44,21 +47,22 @@ queue, and module functions).
 ## SpaDES.tools — spatial algorithms
 
 - `spread()`, `spread2()`, `spread3()` — spatial spreading (fire, disease, dispersal).
-- `neighbourhood()`, `splitRaster()`, `mergeRaster()`, `distanceFromEachPoint()`.
+- `adj()`, `rings()`, `cir()` (neighbourhoods), `splitRaster()`, `mergeRaster()`,
+  `distanceFromEachPoint()`.
 
-## SpaDES.project — scaffolding and project setup
+## SpaDES.project — project setup
 
-- `newModule()`, `newProject()` — scaffold a module or a whole project.
+- `newModule()`, `newProject()` are in **SpaDES.core**, not here.
 - `setupProject()` — set up a whole project (download modules, install packages, prepare
   paths/params) and return objects ready for `simInit()`/`spades()`.
 - Also holds parameter-sweep/replicate/`simList`-experiment capabilities formerly in the
-  deprecated `SpaDES.experiment`.
+  archived `SpaDES.experiment`.
 
 ## Other packages
 
 - `quickPlot` — `Plot()`, `clearPlot()`: fast modular grid-based plotting.
 - `SpaDES` — meta-package tying the toolkit together.
 - `SpaDES.config` — project configuration.
-- `SpaDES.addins`, `SpaDES.install`, `SpaDES.docs` — RStudio addins, install helpers,
-  documentation site.
-- `pemisc` — miscellaneous Predictive Ecology helpers.
+- `SpaDES.docs` — documentation helpers (e.g. `prepManualRmds()` for LandR-Manual).
+- Legacy: `SpaDES.install` (superseded by `setupProject()`), `SpaDES.addins`, `pemisc`
+  (no code changes since 2022).
