@@ -84,9 +84,10 @@ starts every run from the same state.
 **Rule for the assistant.** Whenever replicates run on a cluster the user creates
 (`parallel::makeCluster()`, `makeForkCluster()`, or one passed into other code), you
 **must** make sure `parallel::clusterSetRNGStream(cl, iseed)` is called on it before any
-replicate runs. Check the user's code for it and add it if it is missing. For the queue
-runners, make sure `global.R` does not call `set.seed()` with a constant; if a seed is
-wanted, derive it from the row's replicate column.
+replicate runs. Check the user's code for it and add it if it is missing. If the
+replicates must also be reproducible, give each replicate its own stream instead (see
+"Reproducible replicates" below). For the queue runners, make sure `global.R` does not
+call `set.seed()` with a constant; derive the seed from the row's `.rep` column.
 
 Tested on SpaDES.core 3.2.0 and SpaDES.project 1.2.0, with a simList whose `init` had
 already run:
@@ -106,6 +107,59 @@ already run:
 The old `SpaDES.experiment::experiment(cl = ...)` is the likely source of the identical
 replicates seen in 2022–23. It called `clusterSetRNGStream()` only on a cluster it made
 itself, and used a cluster passed in as-is, so a fork cluster gave identical runs.
+
+### Reproducible replicates
+
+"Different from each other" and "the same every time you rerun" are separate
+requirements. Rerunning replicate 3 should give replicate 3's numbers again, whatever
+the number of workers and whichever worker picks it up. The reliable way to get that is
+**one random-number stream per replicate, made from one seed**, not one per worker.
+
+- **`experiment()` / `experiment2()`:** call `set.seed()` once before the call. With
+  `future.seed = TRUE` each replicate gets its own stream from that seed. Tested:
+  identical results sequentially and on 2 or 3 workers.
+- **Your own cluster:** `clusterSetRNGStream(cl, iseed)` alone is **not** enough. It
+  gives one stream per *worker*, so results depend on how many workers there are and
+  which tasks each runs. Tested: going from 3 workers to 2 changed replicates 3 and 4.
+  Make the streams in the parent, one per replicate, and set each task's stream before
+  it runs:
+
+  ```r
+  RNGkind("L'Ecuyer-CMRG")
+  set.seed(7)
+  streams <- vector("list", nReps)
+  streams[[1]] <- .Random.seed
+  for (i in seq_len(nReps)[-1]) streams[[i]] <- parallel::nextRNGStream(streams[[i - 1]])
+
+  runRep <- function(i) {
+    assign(".Random.seed", streams[[i]], envir = globalenv())
+    spades(reproducible::Copy(sim))
+  }
+  ## PSOCK workers are fresh sessions: load packages and send the objects
+  parallel::clusterEvalQ(cl, library(SpaDES.core))
+  parallel::clusterExport(cl, c("streams", "sim"))
+  out <- parallel::clusterApplyLB(cl, seq_len(nReps), runRep)
+  ```
+
+  Tested: the same results on 2 or 3 workers, on PSOCK and fork clusters, with
+  `clusterApply()` or `clusterApplyLB()`, and with plain `lapply()`.
+- **Queue runners (`experimentTmux()` and friends):** each run is a fresh R session that
+  has `.rep` assigned from its row, so build the same per-replicate stream at the top of
+  `global.R`:
+
+  ```r
+  RNGkind("L'Ecuyer-CMRG")
+  set.seed(7)
+  for (i in seq_len(.rep - 1)) .Random.seed <- parallel::nextRNGStream(.Random.seed)
+  ```
+
+  Tested with separate `Rscript` processes: each `.rep` reproduces on rerun and gives the
+  same numbers as that replicate from the cluster version above.
+
+Use L'Ecuyer-CMRG streams rather than `set.seed(base + rep)`. Adjacent seeds usually
+behave, but only the streams are guaranteed not to overlap. Record the seed and the
+`RNGkind` with the results. A module's `.seed` parameter still overrides all of this for
+its event.
 
 Before trusting a spread of results, compare one stochastic output across two
 replicates.
