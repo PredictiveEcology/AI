@@ -58,8 +58,11 @@ Replicate only what should vary. If `init` (or any event) has already run in the
 `simList` you pass in, its stochastic results are baked in, and every replicate starts
 from the same draw. On SpaDES.core 3.2.0 and SpaDES.project 1.2.0, `experiment()` and
 `experiment2()` give the replicates different random streams after that point, but all
-of them share the draws already made. Older versions were worse: every replicate was
-identical, because the seed set during `init` carried forward to all of them.
+of them share the draws already made. This was checked by running `init` with
+`simInit()` + `spades(events = "init")` and with `simInitAndSpades(events = "init")`,
+under sequential and multisession `future` plans. In 2022–23 all replicates were
+reported identical in this situation; that no longer reproduces, but if the stochastic
+output you care about is made in `init`, the effect is the same.
 
 When some modules should run once and the rest should be replicated, run the first
 group on its own and start a fresh `simList` for the second:
