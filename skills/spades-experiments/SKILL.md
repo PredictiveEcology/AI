@@ -1,6 +1,6 @@
 ---
 name: spades-experiments
-description: Running a SpaDES simulation many times — replicates of a stochastic model, scenario comparisons, parameter sweeps, and controlled before/after regression tests. Covers the SpaDES.project experiment family (experiment(), experiment2() in memory; experimentTmux(), experimentFuture(), experimentSBATCH() driven by a global.R and a shared job queue), which to pick, how replicates and seeds work, collecting results with as.data.table() on a simLists, and how to design a comparison whose difference can only be the change under test. Use when the user asks to run replicates, compare scenarios, sweep parameters, run on a cluster, or test whether a code change alters simulation results. For writing the module being run use spades-module-development.
+description: Running a SpaDES simulation many times — replicates of a stochastic model, scenario comparisons, parameter sweeps, and controlled before/after regression tests. Covers the SpaDES.project experiment family (experiment(), experiment2() in memory; experimentTmux(), experimentFuture(), experimentSBATCH() driven by a global.R and a shared job queue), which to pick, how replicates and seeds work (including giving each parallel replicate its own random-number stream with clusterSetRNGStream()), collecting results with as.data.table() on a simLists, and how to design a comparison whose difference can only be the change under test. Use when the user asks to run replicates, compare scenarios, sweep parameters, run on a cluster, or test whether a code change alters simulation results. For writing the module being run use spades-module-development.
 metadata:
   ecosystem: SpaDES
   version: "1.0"
@@ -61,21 +61,6 @@ from the same draw. On SpaDES.core 3.2.0 and SpaDES.project 1.2.0, `experiment()
 of them share the draws already made. If the stochastic output you care about is made
 in `init`, the replicates will look identical.
 
-**Forked workers make every replicate identical.** A forked process starts with a copy
-of the parent's random-number state, so unless something reseeds each fork, all of them
-draw the same numbers. Tested on a simList whose `init` had already run:
-
-| How the replicates were run | Replicates |
-|---|---|
-| `experiment()` / `experiment2()` under any `future::plan()`, including `multicore` (forks) | differ — `future.seed = TRUE` gives each its own stream |
-| `parallel::mclapply()` with the default `mc.set.seed = TRUE` | differ |
-| `parallel::makeForkCluster()` + `clusterApply()`, or `mclapply(mc.set.seed = FALSE)` | **identical** |
-
-The old `SpaDES.experiment::experiment(cl = ...)` is the likely source of the identical
-replicates seen in 2022–23: it reseeded a cluster only when it made the cluster itself,
-and used a cluster you passed in as-is. If you run replicates with your own fork
-cluster, call `parallel::clusterSetRNGStream(cl)` first, or use `experiment2()`.
-
 When some modules should run once and the rest should be replicated, run the first
 group on its own and start a fresh `simList` for the second:
 
@@ -89,8 +74,42 @@ simD <- simInit(times = times, modules = c("D", "E", "F"),
 sims <- experiment2(simD, replicates = 10)
 ```
 
-Check that the replicates really differ before trusting a spread of results: compare
-one stochastic output across two replicates.
+### Parallel replicates and random-number streams
+
+Each replicate needs its own random-number stream. Parallel methods that do not give it
+one produce **identical replicates**, silently. A forked worker starts with a copy of
+the parent's random-number state, and a script that calls `set.seed()` with a constant
+starts every run from the same state.
+
+**Rule for the assistant.** Whenever replicates run on a cluster the user creates
+(`parallel::makeCluster()`, `makeForkCluster()`, or one passed into other code), you
+**must** make sure `parallel::clusterSetRNGStream(cl, iseed)` is called on it before any
+replicate runs. Check the user's code for it and add it if it is missing. For the queue
+runners, make sure `global.R` does not call `set.seed()` with a constant; if a seed is
+wanted, derive it from the row's replicate column.
+
+Tested on SpaDES.core 3.2.0 and SpaDES.project 1.2.0, with a simList whose `init` had
+already run:
+
+| How the replicates were run | Replicates |
+|---|---|
+| `experiment()` / `experiment2()` under any `future::plan()` (sequential, multisession, multicore forks) | differ: `future.seed = TRUE` gives each replicate its own stream |
+| `parallel::mclapply()`, default `mc.set.seed = TRUE` | differ |
+| `parallel::mclapply(mc.set.seed = FALSE)` | **identical** |
+| `parallel::makeForkCluster()` + `clusterApply()` | **identical** |
+| `makeForkCluster()` + `clusterSetRNGStream()` + `clusterApply()` | differ |
+| `parallel::makeCluster()` (PSOCK) + `clusterApply()` | differ (fresh sessions); add `clusterSetRNGStream()` to make them reproducible |
+| Separate R processes each sourcing a `global.R` (the mechanism `experimentTmux()`, `experimentFuture()` and `experimentSBATCH()` use; tested with `Rscript`, not through the runners) | differ |
+| Same, with `set.seed(42)` in `global.R` | **identical** |
+| Any method, with a module's `.seed` parameter set on an event | **identical** for that event |
+
+The old `SpaDES.experiment::experiment(cl = ...)` is the likely source of the identical
+replicates seen in 2022–23. It called `clusterSetRNGStream()` only on a cluster it made
+itself, and used a cluster passed in as-is, so a fork cluster gave identical runs.
+
+Before trusting a spread of results, compare one stochastic output across two
+replicates.
+
 
 ## Vary something, not just the seed
 
