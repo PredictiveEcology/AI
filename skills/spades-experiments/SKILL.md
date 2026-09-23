@@ -78,30 +78,34 @@ sims <- experiment2(simD, replicates = 10)
 
 Each replicate needs its own random-number stream. Parallel methods that do not give it
 one produce **identical replicates**, silently. A forked worker starts with a copy of
-the parent's random-number state, and a script that calls `set.seed()` with a constant
-starts every run from the same state.
+the parent's random-number state. And when every run sources the same script (the queue
+runners), a constant `set.seed()` in that script starts every run from the same state.
+This does not apply to `experiment()` and `experiment2()`: the script that calls them
+runs once, and a `set.seed()` there only fixes the parent seed that the per-replicate
+streams are made from.
 
 **Rule for the assistant.** Whenever replicates run on a cluster the user creates
 (`parallel::makeCluster()`, `makeForkCluster()`, or one passed into other code), you
 **must** make sure `parallel::clusterSetRNGStream(cl, iseed)` is called on it before any
 replicate runs. Check the user's code for it and add it if it is missing. If the
 replicates must also be reproducible, give each replicate its own stream instead (see
-"Reproducible replicates" below). For the queue runners, make sure `global.R` does not
-call `set.seed()` with a constant; derive the seed from the row's `.rep` column.
+"Reproducible replicates" below). For the queue runners, which source `global.R`
+once per run, make sure it does not call `set.seed()` with a constant; derive the seed
+from the row's `.rep` column.
 
 Tested on SpaDES.core 3.2.0 and SpaDES.project 1.2.0, with a simList whose `init` had
 already run:
 
 | How the replicates were run | Replicates |
 |---|---|
-| `experiment()` / `experiment2()` under any `future::plan()` (sequential, multisession, multicore forks) | differ: `future.seed = TRUE` gives each replicate its own stream |
+| `experiment()` / `experiment2()` under any `future::plan()` (sequential, multisession, multicore forks), with or without `set.seed()` before the call | differ: `future.seed = TRUE` gives each replicate its own stream |
 | `parallel::mclapply()`, default `mc.set.seed = TRUE` | differ |
 | `parallel::mclapply(mc.set.seed = FALSE)` | **identical** |
 | `parallel::makeForkCluster()` + `clusterApply()` | **identical** |
 | `makeForkCluster()` + `clusterSetRNGStream()` + `clusterApply()` | differ |
 | `parallel::makeCluster()` (PSOCK) + `clusterApply()` | differ (fresh sessions); add `clusterSetRNGStream()` to make them reproducible |
 | Separate R processes each sourcing a `global.R` (the mechanism `experimentTmux()`, `experimentFuture()` and `experimentSBATCH()` use; tested with `Rscript`, not through the runners) | differ |
-| Same, with `set.seed(42)` in `global.R` | **identical** |
+| Same, with `set.seed(42)` in that `global.R` (so it runs at the start of every run) | **identical** |
 | Any method, with a module's `.seed` parameter set on an event | **identical** for that event |
 
 The old `SpaDES.experiment::experiment(cl = ...)` is the likely source of the identical
