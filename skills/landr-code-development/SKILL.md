@@ -3,7 +3,7 @@ name: landr-code-development
 description: Developing, maintaining, and improving the R code that implements LandR SpaDES modules and the LandR-specific mechanisms behind them — implementing or changing simulation processes, but also refactoring, debugging, optimizing, and generally maintaining module .R and R/ helper code, the accessory packages (LandR, LandR.CS, fireSenseUtils), cohort/pixel-group/species-ecoregion data structures, and how modules interact through the simList, all coded against the SpaDES toolkit. Use when the user asks to write, change, fix, improve, or refactor LandR module or package code, implement or adjust a simulation process, or make modules interact. For pure structure/metadata edits use spades-module-anatomy; for tests use testing; for docs use code-documentation.
 metadata:
   ecosystem: LandR
-  version: "1.0"
+  version: "1.1"
 ---
 
 # LandR code development
@@ -99,10 +99,16 @@ existing usage in the file you are editing.
   cannot drift out of sync.
 - **Regenerate pixelGroups with `generatePixelGroups()` whenever cohort composition
   changes.**
-- **Squash young cohorts (age <= successionTimestep) into one per species/pixelGroup** to
-  prevent age-1 cohort explosion (LANDIS-II behavior).
+- **Squash young cohorts into one per species/pixelGroup** to prevent age-1 cohort
+  explosion (LANDIS-II behavior). `ageReclassification()` acts on
+  `age <= successionTimestep + 1`, which is also the age at which `Biomass_core`
+  creates new cohorts — so in an undisturbed run nothing is ever younger than that.
+  See `references/cohort-semantics.md`.
 - **Track burned pixels (`treedFirePixelTableSinceLastDisp`) to avoid double-counting**
   between fire and dispersal.
+- **Read the leading-proportion thresholds through `mixedwoodProp()` /
+  `leadingSpeciesProp()`**, never as literals — they are two different questions that
+  share one argument name (`references/cohort-semantics.md`).
 
 ### Assertions and defensive checks
 
