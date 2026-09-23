@@ -30,6 +30,11 @@ Key distinctions:
   activate when their `description` matches.
 - **Permission rules are enforced** — `deny` holds even in auto/YOLO modes; grants can
   persist per project/session.
+- **`AGENTS-rules/` is a library, not a fifth mechanism** — short behavioural rules
+  published one per file, which you deliver through `AGENTS.md` or the SessionStart
+  hook. It exists because a memory file is always part team convention and part
+  personal style, so the unit worth sharing is a rule rather than a whole file. See
+  `AGENTS-rules/README.md`.
 - **Hooks are programmable but fail-open** — if a hook errors or times out, the action
   proceeds. A hook is a strong nudge, not an ironclad lock. Global hooks run for every
   project (even untrusted); project hooks need a trusted workspace. Global and project
@@ -40,6 +45,7 @@ Key distinctions:
 | Guardrail nature | Put it in |
 |---|---|
 | "Behave this way" prose (succinctness, style, ecologist-friendly docs, authorship footer, commit sign-off, session-length prompts) | **SessionStart hook** (for always-on user-wide reach) and/or **AGENTS.md** (per project) |
+| A working-practice rule others may or may not want (root-cause discipline, PR brevity, session logs) | A file in **`AGENTS-rules/`**, then pasted into `AGENTS.md` or injected by the SessionStart hook |
 | Hard block of a dangerous command (`rm -rf`, force-push, blanket `git add`) | **`permission` deny** rules |
 | Force confirmation on a class of actions (`git commit`, outside-project file access) | **`permission` ask** rules and/or a **PreToolUse hook** |
 | Per-action re-approval (re-ask every time, no persistent grant) | **PreToolUse hook** forcing `ask` (permission grants persist, so a hook is required) |
