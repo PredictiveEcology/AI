@@ -20,18 +20,16 @@ conventions in the target module or package rather than imposing new ones.
 
 ## Module test layout
 
-- `tests/unitTests.R` — entry point that runs the suite:
-  ```r
-  # run all tests in the folder:
-  test_dir("../<Module>/tests/testthat")
-  # or a single file:
-  test_file("../<Module>/tests/testthat/test-<name>.R")
-  ```
+- `tests/testthat/setup.R` — sets options and defines `testPaths` (a scratch tree whose
+  `modulePath` is the folder *containing* the module). Copy it from
+  `examples/module-tests-setup.R` in `PredictiveEcology/actions`. CI (`testthat-module`)
+  converts the module to a package with `SpaDES.core::convertToPackage()` and runs
+  `testthat::test_local()`, so helpers can be called directly.
 - `tests/testthat/test-<name>.R` — one file per function or event, named after the thing
   tested, e.g. `test-<helperFn>.R`, `test-<Module>Init.R`.
 
 Read an existing test in the target module before writing a new one, to match its fixtures
-and style. In LandR, `Biomass_core` is the richest reference (~21 test files).
+and style. In LandR, `Biomass_core` is a good reference.
 
 ## Building minimal inputs
 
@@ -56,7 +54,7 @@ test_that("<helperFn> computes the expected result", {
     params  = list(.globals = list(verbose = FALSE)),
     modules = list("<Module>"),
     objects = list(),
-    paths   = list(modulePath = "..", outputPath = tempdir())
+    paths   = testPaths                               # from setup.R
   )
   input <- data.table(id = 1L, x = 1:5)               # small, fixed fixture
 
@@ -75,7 +73,7 @@ Run the module (or a couple of events) and assert on the resulting `simList`:
 test_that("<Module> init produces its output object", {
   mySim <- simInit(times = list(start = 0, end = 2), params = parameters,
                    modules = list("<Module>"), objects = objects,
-                   paths = list(modulePath = "..", outputPath = tempdir()))
+                   paths = testPaths)
   out <- spades(mySim, debug = FALSE)
   expect_s4_class(out, "simList")
   expect_true(!is.null(out$<outputObject>))
@@ -93,7 +91,7 @@ test_that("<upstream> -> <downstream> chain runs end to end", {
     params  = params,
     modules = list("<upstream>", "<downstream>"),
     objects = objects,
-    paths   = list(modulePath = "..", outputPath = tempdir(), inputPath = tempdir())
+    paths   = testPaths
   )
   out <- spades(mySim, debug = FALSE)
   expect_s4_class(out, "simList")
@@ -116,8 +114,7 @@ Toolkit packages (`SpaDES.core`, `SpaDES.tools`, `reproducible`, `Require`, etc.
 accessory packages (`LandR`, `LandR.CS`, `fireSenseUtils`) all use the standard testthat
 package layout (`tests/testthat/` + `tests/testthat.R`). Run them via the devtools workflow
 — see `spades-package-development` (toolkit) — e.g. `devtools::test("<Package>")`.
-`fireSenseUtils/tests/testthat/test-data.R` is an existing LandR example; `LandR` has no
-suite yet.
+`LandR` and `fireSenseUtils` both have substantial suites to copy from.
 
 ## Running tests
 

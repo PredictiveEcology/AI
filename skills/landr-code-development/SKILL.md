@@ -43,13 +43,12 @@ for all of it, in particular:
   package integration tests; decide module-vs-package placement.
 - **Reuse and dependencies** — check for existing functions before writing new ones; avoid
   and flag new dependencies.
-- **Memory-efficient coding** — prefer `purrr` over `Map`/`do.call`/`apply`; avoid
+- **Memory-efficient coding** — no `purrr` or other tidyverse dependencies; avoid
   `as.formula` and closures over large environments; declare functions in packages or the
   module `R/` folder.
 
-This skill adds only what is **LandR-specific** on top of that. For the SpaDES toolkit
-source, see `~/GitHub/SpaDES/*` and the `landr-overview` skill's
-`references/spades-toolkit.md`.
+This skill adds only what is **LandR-specific** on top of that. For the SpaDES toolkit,
+see the `landr-overview` skill's `references/spades-toolkit.md`.
 
 ## LandR module code and mechanisms
 
@@ -140,12 +139,10 @@ existing usage in the file you are editing.
   over another, especially for warnings that could go unnoticed in a long batch/HPC run.
 - **Prefix messages with context** (module name, pixel group) for traceability across
   millions of pixels.
-- **Respect `LandR.verbose` for log verbosity.** Level semantics are still being pinned
-  down (see LandR.ai issue #3).
-- **Colour messages with `crayon` by message type, consistently** — observed convention:
-  `crayon::green()` for regeneration/progress, `crayon::magenta()` for summary
-  statistics/counts, `crayon::red()` for error/warning conditions. Being formalized in
-  LandR.ai issue #4.
+- **Respect `LandR.verbose` for log verbosity** (default `1`; higher numbers give more
+  messages). LandR's options are documented in `?LandROptions`.
+- **Colour messages with `cli`, not `crayon`** (crayon is deprecated and has been removed
+  from LandR and `Biomass_core`). Match the colours already used in the file.
 
 ### Naming / style / dependencies
 
@@ -168,7 +165,7 @@ LandR-specific conventions (general style and dependency rules are in
 - **Take care expanding `cohortData` to pixel level** — do it only for processes that
   genuinely act at pixel scale (spatially-explicit processes like dispersal and fire).
 - Some modules compile hot loops with `compiler::cmpfun()`; whether this is still
-  beneficial under modern R is unverified (see LandR.ai issue #2) — do not add it reflexively.
+  beneficial under modern R is unverified — do not add it reflexively.
 
 ### Cross-module consistency to flag
 

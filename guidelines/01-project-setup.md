@@ -49,9 +49,9 @@ Details to establish (LandR workspace):
 
 Details to establish (SpaDES toolkit workspace):
 - Which **toolkit packages** are in scope (`SpaDES.core`, `SpaDES.tools`, `reproducible`,
-  `Require`, `SpaDES.project`, `quickPlot`, `SpaDES.experiment`, `SpaDES.config`,
-  `SpaDES.addins`, `SpaDES.install`, `SpaDES.docs`, the `SpaDES` meta-package, ...)?
-- Which **accessory helper packages** (`pemisc`, `fireSenseUtils`, the `LandR` R package,
+  `Require`, `SpaDES.project`, `quickPlot`, `SpaDES.config`, `SpaDES.docs`, the `SpaDES`
+  meta-package, ...)?
+- Which **accessory helper packages** (`fireSenseUtils`, the `LandR` R package,
   ...)?
 - Whether a **model-system** folder (e.g. LandR) should be available for reference.
 
@@ -69,10 +69,11 @@ For each repo, the fork situation is clarified before cloning or committing:
 - Is the repo a **direct clone of upstream** (e.g. `PredictiveEcology/...`) or a **personal
   fork**?
 - If a fork is used, the `upstream` vs `origin` remotes are noted so branch/PR workflows
-  are correct (branch off `upstream`'s default branch, push to `origin`, PR to `upstream`).
-- The **default development branch** is confirmed per repo. PredictiveEcology repos are
-  **mixed** — many LandR module/package repos use `development`, while SpaDES toolkit
-  repos are mixed between `main` and `master`; new repos should use `main`. Never assume.
+  are correct (branch off `upstream`'s `development`, push to `origin`, PR to
+  `upstream`'s `development`).
+- The **development branch** is confirmed per repo. In PredictiveEcology repos the
+  GitHub default is `main` (a few old ones use `master`), but `main` is the release
+  branch: work branches off, and PRs target, `development`. Never assume.
 
 These answers affect how commits, pushes, and PRs are handled later.
 
