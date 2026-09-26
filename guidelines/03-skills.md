@@ -9,9 +9,13 @@ skills (the first option), how to create a new one only when needed, where skill
 (remote and local), and how loading and precedence work.
 
 > **Shared skills location.** The shared skills live in the `AI` repo
-> (https://github.com/PredictiveEcology/AI, in `skills/`) so everyone works from the same
-> set. Clone or sync the repo into a local skills path (see "Loading / using skills"
-> below).
+> (https://github.com/PredictiveEcology/AI), packaged as three Claude-Code-compatible
+> plugins under `plugins/` (`landr-suite`, `spades-toolkit-suite`, `shared-conventions`),
+> catalogued in the repo-root marketplace `.claude-plugin/marketplace.json`
+> (marketplace name `predictiveecology-ai`). **Installing via the plugin marketplace is
+> the recommended path** (no local clone/sync needed); a manual clone/sync of
+> `plugins/<name>/skills/` into a local skills path (see "Loading / using skills" below)
+> remains a fallback for tools without plugin-marketplace support.
 
 ## Existing team skills (current set)
 
@@ -122,8 +126,27 @@ existing skill as a template.
 **Get the shared team skills first.** They are the primary source; new skills are
 created only when a need is not already covered.
 
+### Recommended: plugin marketplace
+
+1. **Add the marketplace** (once per machine): `/plugin marketplace add PredictiveEcology/AI`
+   (or the Positron GUI equivalent — More menu → Plugins). Literal prompt to give the
+   assistant: *"Add the PredictiveEcology/AI plugin marketplace."*
+2. **Install the plugin(s) needed:** `landr-suite` for LandR work, `spades-toolkit-suite`
+   for SpaDES toolkit work (used by default alongside `landr-suite` too), and
+   `shared-conventions` always. Literal prompt: *"Install the landr-suite,
+   spades-toolkit-suite, and shared-conventions plugins from the PredictiveEcology/AI
+   marketplace."* There is no bundle/dependency chain between the three — install any
+   subset directly.
+3. **Verify:** ask *"What skills are currently available to you?"* — the installed
+   plugins' skill names (e.g. `landr-overview`, `testing`) should appear.
+4. **Update after the marketplace content changes:** *"Check the PredictiveEcology/AI
+   marketplace for plugin updates."* — marketplace refresh is not automatic.
+
+### Fallback: manual clone/sync (tools without plugin-marketplace support)
+
 1. **Get shared skills.** Clone or sync the `AI` repo
-   (`git@github.com:PredictiveEcology/AI.git`, `skills/`) into a local skills path
+   (`git@github.com:PredictiveEcology/AI.git`, `plugins/<name>/skills/` for each of
+   `landr-suite`, `spades-toolkit-suite`, `shared-conventions`) into a local skills path
    (e.g. `~/.agents/skills` or a synced folder); all skills (shared, `landr-*`, and
    `spades-*`) are discovered under the same `skills.paths`. Point `skills.paths` at
    that folder if it is not already a default location. Remember: a **project**
