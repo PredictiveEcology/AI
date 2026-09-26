@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "landr-suite",
+  "displayName": "LandR Ecosystem Development",
+  "version": "0.1.0",
+  "description": "Skills for developing and maintaining the LandR ecosystem: ecosystem orientation and routing, implementing/changing simulation process code and LandR-specific mechanisms (cohort data, pixel groups, species/ecoregion tables), maintaining the LandR/LandR.CS/fireSenseUtils accessory packages, and authoring per-module and multi-module bookdown manuals.",
+  "author": {
+    "name": "PredictiveEcology"
+  },
+  "repository": "https://github.com/PredictiveEcology/AI",
+  "license": "MIT",
+  "keywords": [
+    "landr",
+    "spades",
+    "forest",
+    "simulation",
+    "r"
+  ]
+}
