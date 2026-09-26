@@ -14,9 +14,12 @@ related code. It holds three things:
   `00b-user-guidelines.md` (working *with* the assistant), `01-project-setup.md`
   (project folder + repo set), `02-guardrails.md` (permissions, hooks, `AGENTS.md`), and
   `03-skills.md` (getting, creating, and loading skills).
-- **`skills/`** — the shared team skills: ecosystem-agnostic (`testing`,
-  `code-documentation`), LandR-specific (`landr-*`), and SpaDES-toolkit-specific
-  (`spades-*`). These are the primary source; get them before writing new ones.
+- **`plugins/`** — the shared team skills, packaged as three Claude-Code-compatible
+  plugins: `shared-conventions` (ecosystem-agnostic: `testing`, `code-documentation`),
+  `landr-suite` (LandR-specific), and `spades-toolkit-suite` (SpaDES-toolkit-specific).
+  Catalogued in the repo-root marketplace (`predictiveecology-ai`,
+  `.claude-plugin/marketplace.json`). These are the primary source; get them before
+  writing new ones.
 - **`AGENTS.md`** — a template project-memory file to copy into a workspace root and
   adapt (paths, repository set) to that workspace. It includes a LandR section, a SpaDES
   toolkit section, and shared conventions common to both — include only what your
@@ -71,12 +74,14 @@ remain responsible for the instructions and content the assistant is given, so r
 
 ## Getting the skills
 
-Clone or sync this repo's `skills/` into a local skills path so Posit Assistant
+**Recommended:** add the `PredictiveEcology/AI` plugin marketplace and install the
+`landr-suite`, `spades-toolkit-suite`, and/or `shared-conventions` plugin(s) you need
+(e.g. via `/plugin marketplace add PredictiveEcology/AI`, then `/plugin install
+<name>@predictiveecology-ai`, or the Positron Plugins GUI). **Fallback:** clone or sync
+this repo's `plugins/<name>/skills/` into a local skills path so Posit Assistant
 discovers them, e.g. `~/.agents/skills` or `~/.posit/assistant/skills/`. See
-[`guidelines/03-skills.md`](guidelines/03-skills.md) for the full skill catalog and
-precedence rules.
-
-Alternatively, point your AI assistant to this repo and the `skills/` folder.
+[`guidelines/03-skills.md`](guidelines/03-skills.md) for the full skill catalog,
+plugin-install walkthrough, and precedence rules.
 
 ## Shared vs local
 
@@ -88,4 +93,4 @@ that stay out of this repo. See the "Local instances of these guidelines" sectio
 ---
 
 The documents in this repository — this README, the `guidelines/`, the `AGENTS.md`
-template, and the `skills/` — were drafted with assistance from Claude (Posit Assistant).
+template, and the `plugins/` skills — were drafted with assistance from Claude (Posit Assistant).
