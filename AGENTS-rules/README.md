@@ -8,6 +8,14 @@ style. There is no one file that suits everybody, so this folder makes the unit 
 sharing a **rule** rather than a file. Nobody adopts someone else's `AGENTS.md`; they
 adopt `root-causes-not-patches` because they read it and agreed.
 
+## Two kinds of unit
+
+The flat files here are **prose rules** — advisory, pasted/injected/imported into
+`AGENTS.md` or a hook. **`enforced/`** holds a second kind of unit: `permission` rules
+and hook scripts that Posit Assistant actually applies (or fail-open nudges), copied
+into `settings.json` rather than pasted into a memory file. See
+[`enforced/README.md`](enforced/README.md).
+
 ## Using them
 
 Three ways, from crudest to cleanest. All three work; pick by what your tool supports.

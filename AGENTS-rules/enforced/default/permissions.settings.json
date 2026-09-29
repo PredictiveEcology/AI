@@ -1,0 +1,24 @@
+{
+  "permission": {
+    "read": "allow",
+    "edit": "ask",
+    "bash": {
+      "rm -rf *": "deny",
+      "rm -r *": "deny",
+      "rm -f *": "deny",
+      "git clean *": "deny",
+      "git push --force*": "deny",
+      "git push -f*": "deny",
+      "git reset --hard*": "deny",
+      "git commit*": "ask",
+      "git add -A*": "deny",
+      "git add .*": "deny",
+      "git add --all*": "deny",
+      "git status*": "allow",
+      "git diff*": "allow",
+      "git log*": "allow",
+      "git show*": "allow",
+      "pwd": "allow"
+    }
+  }
+}

@@ -52,12 +52,13 @@ prompt examples at the end of this section.
 
 3. **Create project memory and install guardrails.** Ask the assistant to add an
    `AGENTS.md` at the project root (from the team template in the `AI` repo) and to set up
-   the two hook scripts and the `permission` rules in the global `settings.json`. Have it
-   show the diff and get your sign-off before writing, and back up `settings.json` first;
-   these changes only take effect in a **new conversation**, so be sure to save your
-   progress and restart the conversation. → detail: `02-guardrails.md`; record the concrete
-   files/paths installed on your machine in a local `*.local.md` companion (see "Local
-   instances of these guidelines" below).
+   the two hook scripts and the `permission` rules — the reference content lives in
+   `AGENTS-rules/enforced/default/` in the `AI` repo — in the global `settings.json`.
+   Have it show the diff and get your sign-off before writing, and back up
+   `settings.json` first; these changes only take effect in a **new conversation**, so
+   be sure to save your progress and restart the conversation. → detail:
+   `02-guardrails.md`; record the concrete files/paths installed on your machine in a
+   local `*.local.md` companion (see "Local instances of these guidelines" below).
 
 4. **Get the shared skills.** Recommended: ask the assistant to add the
    `PredictiveEcology/AI` plugin marketplace and install the `landr-suite`/
