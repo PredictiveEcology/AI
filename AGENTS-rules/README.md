@@ -68,13 +68,3 @@ that shape.
   not reformatting unasked, verifying the diff after a change, specific staging, and
   the memory-efficient-R conventions). `guidelines/00b-user-guidelines.md` warns that
   an over-specified memory file stops being read, and that warning applies here too.
-
-## The current set
-
-| Rule | In one line |
-|---|---|
-| `root-causes-not-patches.md` | Fix the defect where it lives, and name it with `file:line` first. |
-| `verify-dont-infer.md` | Run the controlled comparison before blaming the environment. |
-| `shared-ci-actions.md` | Use the organisation's shared CI actions at the shared ref; never hand-patch a copy. |
-| `writing-for-humans.md` | PRs, issues and comments are short and plain, because colleagues pay for length. |
-| `session-log.md` | Keep a durable session record from the start, not at the end. |
