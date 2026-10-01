@@ -51,6 +51,8 @@ optional rather than default.
 | `long-run-interlock` | Warn/block starting a new `spades()`/simulation run, or mutating a module's library, while another long run may still be in progress on a shared machine. |
 | `module-version-bump-reminder` | On a `git commit` that touches a module's `defineModule()` `version` field, remind the assistant to check sibling-module compatibility first (see `landr-package-maintenance`'s version-alignment guidance). |
 | `session-context-injector` | SessionStart hook that summarizes repo/branch/fork state (not behavioral rules) — environment facts, complementing rather than duplicating `default/hooks/session-guardrails.sh`. |
+| `agents-md-size-check` | SessionStart hook that notes when the project `AGENTS.md` exceeds a line threshold (default 200), since it is loaded in full every conversation. Silent otherwise. |
+| `agents-md-token-efficiency` | Paste-ready prose block for `AGENTS.md` (targeted reads, subagent delegation, batching, lean memory). Advisory only; companion to the size check. |
 
 ## Adding an enforced rule
 
