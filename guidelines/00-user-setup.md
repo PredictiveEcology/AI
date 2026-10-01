@@ -26,6 +26,9 @@ Anthropic Claude models, but can be adapted to other AI interfaces.
 
 ## Steps
 
+> A one-page condensed view of these steps is in `00a-quickstart.md`. **Keep the two in
+> sync** when a step here changes.
+
 **Steps 1–2 are your decisions; steps 3–5 you can hand to the assistant** — see the
 prompt examples at the end of this section.
 
@@ -60,18 +63,19 @@ prompt examples at the end of this section.
    `02-guardrails.md`; record the concrete files/paths installed on your machine in a
    local `*.local.md` companion (see "Local instances of these guidelines" below).
 
-4. **Get the shared skills.** Recommended: ask the assistant to add the
-   `PredictiveEcology/AI` plugin marketplace and install the `landr-suite`/
-   `spades-toolkit-suite`/`shared-conventions` plugin(s) you need, then confirm the
-   skills are discoverable. Fallback (no plugin-marketplace support): ask it to clone or
-   sync the team skills repo's `plugins/<name>/skills/` into a local skills path (it
-   needs permission to run `git` and write there); you decide the target path. Only
-   create a new skill if a need isn't already covered. → detail: `03-skills.md`.
+4. **Get the shared skills.** Recommended: **you** type `/plugin` (or `/marketplace`),
+   add the marketplace `PredictiveEcology/AI`, then browse and install the
+   `landr-suite`/`spades-toolkit-suite`/`shared-conventions` plugin(s) you need; the
+   assistant cannot do this from a prompt. Then ask it which skills are available.
+   Fallback (no plugin-marketplace support): ask the assistant to clone or sync the team
+   skills repo's `plugins/<name>/skills/` into a local skills path (it needs permission
+   to run `git` and write there); you decide the target path. Only create a new skill if
+   a need isn't already covered. → detail: `03-skills.md`.
 
 5. **Trust the workspace.** Accept the trust prompt so project memory, project
    settings, and project hooks load. → detail: `01-project-setup.md`.
 
-## Example prompts for steps 3–5
+## Example prompts for steps 3–5 (step 4 is done by you)
 
 Ask the assistant to do the setup. Prompts are tool-neutral; the right-hand column is a
 Posit Assistant + Claude phrasing. Steps 1–2 stay your decisions — the assistant can
@@ -83,7 +87,7 @@ apply in **new** conversations.
 | --- | --- | --- |
 | 3 · Project memory | "Create a project memory file at the project root from the `AI` repo's `AGENTS.md` template, adapting the paths and repo list to this workspace; show me the result before writing." | "Copy the `AI` repo's `AGENTS.md` template into this project root as `AGENTS.md`, adapt the paths/repo list, and show me the diff before writing." |
 | 3 · Guardrails | "Set up the reference guardrails from `02-guardrails.md` (permission allow/ask/deny rules plus the two hook scripts); show me the settings changes before applying." | "Set up the `02-guardrails.md` reference guardrails — the `permission` rules in `settings.json` plus the SessionStart and PreToolUse hooks — back up `settings.json`, and show me the diff before applying. (Takes effect in a new conversation.)" |
-| 4 · Skills | "Add the `PredictiveEcology/AI` plugin marketplace and install the skill plugin(s) I need, then confirm they are available." | "Add the PredictiveEcology/AI plugin marketplace, install `landr-suite` and/or `spades-toolkit-suite` plus `shared-conventions`, then confirm the overview skill(s) for your ecosystem (`landr-overview` and/or `spades-overview`) are discoverable. (Fallback if plugins aren't supported: clone/sync `plugins/<name>/skills/` from `PredictiveEcology/AI` into `~/.agents/skills`.)" |
+| 4 · Skills | *(You do this one: type `/plugin`, add `PredictiveEcology/AI`, browse and install. See `03-skills.md`.)* Then: "Which skills are available to you?" | *(Same.)* Fallback if plugins are unsupported: "Clone/sync `plugins/<name>/skills/` from `PredictiveEcology/AI` into `~/.agents/skills`." |
 | 5 · Trust workspace | "How do I trust this workspace so project memory, settings, and hooks load?" | "How do I trust this workspace in Positron so `AGENTS.md`, project `settings.json`, and project hooks load?" |
 
 `~/.agents/skills` is the tool-neutral, cross-tool skills location (read by Posit

@@ -136,19 +136,20 @@ created only when a need is not already covered.
 
 ### Recommended: plugin marketplace
 
-1. **Add the marketplace** (once per machine): `/plugin marketplace add PredictiveEcology/AI`
-   (or the Positron GUI equivalent — More menu → Plugins). Literal prompt to give the
-   assistant: *"Add the PredictiveEcology/AI plugin marketplace."*
-2. **Install the plugin(s) needed:** `landr-suite` for LandR work, `spades-toolkit-suite`
-   for SpaDES toolkit work (used by default alongside `landr-suite` too), and
-   `shared-conventions` always. Literal prompt: *"Install the landr-suite,
-   spades-toolkit-suite, and shared-conventions plugins from the PredictiveEcology/AI
-   marketplace."* There is no bundle/dependency chain between the three — install any
-   subset directly.
-3. **Verify:** ask *"What skills are currently available to you?"* — the installed
-   plugins' skill names (e.g. `landr-overview`, `testing`) should appear.
-4. **Update after the marketplace content changes:** *"Check the PredictiveEcology/AI
-   marketplace for plugin updates."* — marketplace refresh is not automatic.
+The **user** performs these steps; the assistant cannot add a marketplace or install a
+plugin from a prompt. If asked, walk the user through them.
+
+1. **Add the marketplace** (once per machine): the user types `/plugin` (or
+   `/marketplace`) in the chat box, chooses to add a marketplace, and enters
+   `PredictiveEcology/AI`.
+2. **Browse and install the plugin(s) needed** from that menu: `landr-suite` for LandR
+   work, `spades-toolkit-suite` for SpaDES toolkit work (used by default alongside
+   `landr-suite` too), and `shared-conventions` always. There is no bundle/dependency
+   chain between the three; install any subset directly.
+3. **Verify:** ask the assistant *"What skills are currently available to you?"*; the
+   installed plugins' skill names (e.g. `landr-overview`, `testing`) should appear.
+4. **Update after the marketplace content changes:** the user reopens `/plugin` and
+   refreshes or updates from there. Marketplace refresh is not automatic.
 
 ### Fallback: manual clone/sync (tools without plugin-marketplace support)
 

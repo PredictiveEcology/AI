@@ -58,19 +58,15 @@ to worry about; each ecosystem's own tooling and the assistant handle package se
 
 ## Getting started
 
-1. Read [`guidelines/00-user-setup.md`](guidelines/00-user-setup.md) — a short setup
-   checklist.
-2. You decide the project folder and which repos are in scope; then set up project
-   memory + guardrails and fetch the skills.
-3. Trust the workspace so project memory, settings, and hooks load.
-4. Use [`guidelines/00b-user-guidelines.md`](guidelines/00b-user-guidelines.md) for
-   day-to-day working habits.
+New here? Follow [`guidelines/00a-quickstart.md`](guidelines/00a-quickstart.md) (one
+page, copy-pasteable prompts). The full explanation is in
+[`guidelines/00-user-setup.md`](guidelines/00-user-setup.md), and day-to-day habits are in
+[`guidelines/00b-user-guidelines.md`](guidelines/00b-user-guidelines.md). A cheat sheet of
+commands, and what to do when a guardrail blocks something, is in
+[`cheatsheet/cheatsheet.md`](cheatsheet/cheatsheet.md).
 
-Most of steps 2–3 in [`guidelines/00-user-setup.md`](guidelines/00-user-setup.md) can be done by asking the assistant — see the prompt examples.
-
-The numbered `01`–`03` guideline  are reference documents for the AI assistant. You
-remain responsible for the instructions and content the assistant is given, so read the
-`01`–`03` documentation too — they define what the assistant is instructed to do on your behalf.
+The numbered `01`–`03` guidelines are reference documents for the AI assistant. You
+remain responsible for the instructions and content it is given, so read them too.
 
 > **You are responsible for what the assistant does on your behalf** — the code it writes,
 > the changes it makes, and the instructions it follows. Review its diffs and results, and
@@ -79,14 +75,19 @@ remain responsible for the instructions and content the assistant is given, so r
 
 ## Getting the skills
 
-**Recommended:** add the `PredictiveEcology/AI` plugin marketplace and install the
-`landr-suite`, `spades-toolkit-suite`, and/or `shared-conventions` plugin(s) you need
-(e.g. via `/plugin marketplace add PredictiveEcology/AI`, then `/plugin install
-<name>@predictiveecology-ai`, or the Positron Plugins GUI). **Fallback:** clone or sync
-this repo's `plugins/<name>/skills/` into a local skills path so Posit Assistant
-discovers them, e.g. `~/.agents/skills` or `~/.posit/assistant/skills/`. See
-[`guidelines/03-skills.md`](guidelines/03-skills.md) for the full skill catalog,
-plugin-install walkthrough, and precedence rules.
+"Skills" are add-on instruction packs that teach the assistant how to work on SpaDES and
+LandR code. This repo bundles them as three plugins (see `plugins/`) that you install once.
+
+The easiest way is to install them from inside Posit Assistant:
+
+1. In the chat box, type `/plugin` (or `/marketplace`).
+2. Navigate to marketplace list/menu and add the `PredictiveEcology/AI` marketplace.
+3. Browse the plugins and install the ones you need: e.g. `shared-conventions` for everyone,
+   `spades-toolkit-suite` for SpaDES (and LandR) work, `landr-suite` for LandR.
+
+The assistant cannot do this step for you; you do it through that menu. A manual clone/sync
+alternative (for AI assistants without marketplace), and more detail, are in [`guidelines/03-skills.md`](guidelines/03-skills.md).
+This is also step 4 of [`guidelines/00a-quickstart.md`](guidelines/00a-quickstart.md).
 
 ## Shared vs local
 
