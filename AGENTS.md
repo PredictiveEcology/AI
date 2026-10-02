@@ -42,7 +42,8 @@ these guidelines" section in `guidelines/00-user-setup.md`. Treat any `*.local.m
 as personal and machine-bound.
 
 **Shared skills.** Team skills are the primary source and should be obtained before
-writing new ones. They live in this repo (`PredictiveEcology/AI`, in `skills/`) and are
+writing new ones. They live in this repo (`PredictiveEcology/AI`, in `plugins/`) and are
+installed by the user as plugins from its marketplace (`/plugin`), or, as a fallback,
 cloned/synced into a local skills path (e.g. `~/.agents/skills` or
 `~/.posit/assistant/skills/`). See `guidelines/03-skills.md`.
 
@@ -292,7 +293,7 @@ first.
 ## Skills (shared set)
 
 Team skills are the primary source — obtain them before writing new ones (shared repo
-`PredictiveEcology/AI`, in `skills/`, synced into a local skills path such as
+`PredictiveEcology/AI`, in `plugins/`, installed as plugins via `/plugin`, or synced into a local skills path such as
 `~/.agents/skills`). See `guidelines/03-skills.md`.
 
 - `testing` — unit + integration tests (`tests/testthat/`, in-memory inputs, asserting on

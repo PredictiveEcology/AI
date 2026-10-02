@@ -5,11 +5,12 @@ explanation in [`00-user-setup.md`](00-user-setup.md) if you want the reasoning.
 
 <!-- Maintainers: this is a condensed view of 00-user-setup.md "Steps". Keep the two in sync. -->
 
-**We recomend using** Positron with Posit Assistant or Claude + Claude Code, and R. Git and a GitHub account are
+**We recommend using** Positron with Posit Assistant or Claude + Claude Code, and R. Git and a GitHub account are
 helpful but not required. Other AI interfaces are possible, but not tested.
 
-You make the choices in steps 1 and 2. In steps 3 and 4 you can ask the assistant to do
-the work; it should show you what it plans to change and wait for your approval.
+Steps 1 to 3 are your own choices and clicks. In step 4 you can ask the assistant to do
+the work; it shows you what it plans to change and waits for your approval. Step 5 you do
+yourself, through a menu.
 
 ## 1. Pick your project folder
 

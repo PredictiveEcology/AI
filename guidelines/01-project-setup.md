@@ -12,7 +12,8 @@ focus — differences are called out inline. For the short action checklist, see
 > **Team resources.** Guidelines, the `AGENTS.md` template, and the shared skills all
 > live in one repo:
 > - `AI` repo: https://github.com/PredictiveEcology/AI
->   (`git@github.com:PredictiveEcology/AI.git`) — `guidelines/`, `AGENTS.md`, `skills/`.
+>   (`git@github.com:PredictiveEcology/AI.git`) — `guidelines/`, `AGENTS.md`, `plugins/`
+>   (skills), `AGENTS-rules/`.
 
 ## The working folder
 

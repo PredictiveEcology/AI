@@ -87,7 +87,7 @@ The easiest way is to install them from inside Posit Assistant:
 
 The assistant cannot do this step for you; you do it through that menu. A manual clone/sync
 alternative (for AI assistants without marketplace), and more detail, are in [`guidelines/03-skills.md`](guidelines/03-skills.md).
-This is also step 4 of [`guidelines/00a-quickstart.md`](guidelines/00a-quickstart.md).
+This is also step 5 of [`guidelines/00a-quickstart.md`](guidelines/00a-quickstart.md).
 
 ## Shared vs local
 
