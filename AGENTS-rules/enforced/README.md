@@ -42,7 +42,9 @@ Optional guard scripts, each independent — take any subset. Adapted (not copie
 verbatim) from FOR-CAST's `ai_workflows` `r-project-core` plugin
 (https://github.com/FOR-CAST/ai_workflows), credited as the source of the pattern.
 Each subfolder has its own short README explaining what it blocks/warns and why it's
-optional rather than default.
+optional rather than default. All have a script except `long-run-interlock` (a pattern
+only: detecting a running simulation is team-specific) and `agents-md-token-efficiency`
+(prose, not a hook). Scripts have been tested with sample inputs only.
 
 | Rule | What it does |
 |---|---|

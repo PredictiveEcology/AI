@@ -12,6 +12,30 @@ hook makes it mechanical instead of relying on the assistant to remember.
 reformat on save. If yours doesn't, the behavioral rule alone is enough, and the hook
 just adds friction to ordinary `edit` calls on `.R` files.
 
-**Sketch:** PreToolUse hook matching `edit|write`; inspect `tool_input.file_path`; if it
-ends in `.R`, return `{"permissionDecision": "deny", "permissionDecisionReason":
-"Edit .R files via bash/Python, not the editor tool — see AGENTS.md."}`.
+## Install
+
+1. Copy `edit-r-via-shell-only.py` to a hooks folder (`~/.posit/assistant/hooks/` for user-wide, or
+   `<project>/.posit/assistant/hooks/`) and `chmod +x` it.
+2. Merge into the matching `settings.json` (global and project hooks are additive):
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "edit|write",
+        "hooks": [
+          { "type": "command", "command": "~/.posit/assistant/hooks/edit-r-via-shell-only.py" }
+        ]
+      }
+    ]
+  }
+}
+```
+
+3. Takes effect in a **new conversation**. Hooks fail open: if the script errors, the
+   action proceeds.
+
+Tested with sample inputs only, not yet in a live session.
+
+Drafted with assistance from Claude (Posit Assistant).

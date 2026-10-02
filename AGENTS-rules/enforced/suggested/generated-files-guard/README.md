@@ -12,6 +12,30 @@ resulting confusion is hard to diagnose after the fact.
 committing may not need the extra prompt; some contributors intentionally hand-patch a
 generated file temporarily while debugging a roxygen issue.
 
-**Sketch:** PreToolUse hook matching `edit|write`; inspect `tool_input.file_path`; if it
-matches `NAMESPACE` or `man/*.Rd`, return `ask` with a reminder to edit the roxygen2
-source (`R/*.R` `@export`/`@param` blocks) and re-run `devtools::document()` instead.
+## Install
+
+1. Copy `generated-files-guard.py` to a hooks folder (`~/.posit/assistant/hooks/` for user-wide, or
+   `<project>/.posit/assistant/hooks/`) and `chmod +x` it.
+2. Merge into the matching `settings.json` (global and project hooks are additive):
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "edit|write",
+        "hooks": [
+          { "type": "command", "command": "~/.posit/assistant/hooks/generated-files-guard.py" }
+        ]
+      }
+    ]
+  }
+}
+```
+
+3. Takes effect in a **new conversation**. Hooks fail open: if the script errors, the
+   action proceeds.
+
+Tested with sample inputs only, not yet in a live session.
+
+Drafted with assistance from Claude (Posit Assistant).
