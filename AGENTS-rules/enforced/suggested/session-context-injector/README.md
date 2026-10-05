@@ -1,5 +1,7 @@
 # session-context-injector
 
+> At the start of a session it lists each repository's current branch and whether it is ahead of or behind its remote, so the assistant does not work on the wrong branch.
+
 **Optional.** A SessionStart hook that prints a short summary of *environment facts* —
 current repo, branch, whether it's a fork, ahead/behind status against upstream — rather
 than *behavioral rules* (which `default/hooks/session-guardrails.sh` already covers).

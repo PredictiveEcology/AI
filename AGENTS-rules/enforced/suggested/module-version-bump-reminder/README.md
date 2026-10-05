@@ -1,5 +1,7 @@
 # module-version-bump-reminder
 
+> When a commit changes a module's version number, it asks you to first check that the other modules run alongside it still match and work together.
+
 **Optional.** A PreToolUse hook that, when a `git commit` touches a module's
 `defineModule()` `version` field, reminds the assistant to check sibling-module
 compatibility before proceeding.

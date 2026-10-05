@@ -1,5 +1,7 @@
 # agents-md-size-check
 
+> A note at the start of a session when the assistant's project notes file (`AGENTS.md`) has grown long. The assistant re-reads that file every time, so a long one uses up your token budget.
+
 **Optional.** A SessionStart hook that measures the project's `AGENTS.md` and, only if
 it is longer than a threshold (default 200 lines, set with `AGENTS_MD_MAX_LINES`),
 injects a short note with its line count and approximate token count. It prints nothing

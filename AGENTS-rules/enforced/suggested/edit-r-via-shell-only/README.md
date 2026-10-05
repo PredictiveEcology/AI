@@ -1,5 +1,7 @@
 # edit-r-via-shell-only
 
+> Stops the assistant from changing R scripts with the editor's built-in tool, which can quietly reformat the whole file. It has to make the change another way, so you only see the lines that really changed.
+
 **Optional.** A PreToolUse hook that denies the editor's `edit`/`write` tools against
 `*.R` files, forcing changes through `bash` (heredoc) or a Python one-liner instead.
 

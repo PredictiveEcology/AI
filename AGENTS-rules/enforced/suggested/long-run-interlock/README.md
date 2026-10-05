@@ -1,5 +1,7 @@
 # long-run-interlock
 
+> Would warn before starting or changing a model while another long simulation is still running on the same machine, so one run cannot disturb the other. This one is a description only; there is no script yet.
+
 **Optional.** A PreToolUse hook that warns or blocks starting a new `spades()`/
 simulation run, or mutating a module's library (editing its `R/` code or reinstalling
 its dependencies), while another long run may still be in progress on a shared machine.

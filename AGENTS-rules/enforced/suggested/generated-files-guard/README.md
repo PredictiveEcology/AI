@@ -1,5 +1,7 @@
 # generated-files-guard
 
+> Asks you before the assistant edits by hand the files that R creates automatically (`NAMESPACE` and the `man/` help files), because the next documentation build would overwrite that edit.
+
 **Optional.** A PreToolUse hook that asks or denies before hand-editing files that
 should only be produced by tooling — `NAMESPACE` and `man/*.Rd` (roxygen2-generated) in
 LandR/SpaDES packages.

@@ -1,5 +1,7 @@
 # agents-md-token-efficiency
 
+> A short set of habits you can paste into your notes file so the assistant reads less and replies more briefly, which saves your token budget.
+
 **Optional.** Prose rules to paste into a project `AGENTS.md` so the assistant works in
 a token-efficient way. Unlike the other `suggested/` entries this is not a hook or a
 `permission` rule: nothing here can be enforced mechanically. Size-aware gating is not
