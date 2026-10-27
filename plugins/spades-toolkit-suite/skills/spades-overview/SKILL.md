@@ -34,17 +34,16 @@ See [references/spades-toolkit.md](references/spades-toolkit.md) for the package
 cheat-sheet. In brief:
 
 - **`SpaDES.core`** — the framework: `simInit()`, `spades()`, `defineModule()`, events,
-  parameters, and `simList` accessors.
+  parameters, `simList` accessors, and scaffolding (`newModule()`, `newProject()`).
 - **`SpaDES.tools`** — spatial algorithms (`spread()`/`spread2()`, neighbourhoods, raster
   split/merge).
 - **`reproducible`** — `Cache()` and `prepInputs()` for reproducible caching and data prep.
 - **`Require`** — reproducible, version/branch-aware package install and load.
-- **`SpaDES.project`** — scaffolding and whole-project setup (`newModule()`,
-  `newProject()`, `setupProject()`); also holds the parameter-sweep/replicate capabilities
-  formerly in the deprecated `SpaDES.experiment`.
+- **`SpaDES.project`** — whole-project setup (`setupProject()`); also holds the
+  parameter-sweep/replicate capabilities formerly in the archived `SpaDES.experiment`.
 - **`quickPlot`** — fast modular plotting (`Plot()`, `clearPlot()`).
-- Companions: `SpaDES` (meta-package), `SpaDES.config`, `SpaDES.addins`, `SpaDES.install`,
-  `SpaDES.docs`, and accessory helpers such as `pemisc`.
+- Companions: `SpaDES` (meta-package), `SpaDES.config`, `SpaDES.docs`. Legacy:
+  `SpaDES.install` (superseded by `setupProject()`), `SpaDES.addins`, `pemisc`.
 
 ## Which skill to use
 

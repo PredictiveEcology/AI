@@ -12,7 +12,7 @@ metadata:
 > ships with a SpaDES module — the `.Rmd` (rendered to `.md`/`.html`) that describes a
 > single module: its purpose, parameters, inputs/outputs, and how to run it.
 
-Each module scaffolded by `SpaDES.project::newModule()` includes a `<Module>.Rmd` manual
+Each module scaffolded by `SpaDES.core::newModule()` includes a `<Module>.Rmd` manual
 alongside the module `.R`. This skill will describe writing and building that manual, and
 how a model system built on the toolkit (e.g. LandR) may aggregate per-module manuals into
 a larger document.

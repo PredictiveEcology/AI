@@ -1,7 +1,6 @@
 # SpaDES toolkit cheat-sheet
 
-The SpaDES packages live at `~/GitHub/SpaDES/*` and are documented at
-https://spades.predictiveecology.org/. This is a quick reference; defer to the package
+The SpaDES packages are documented at https://spades.predictiveecology.org/. This is a quick reference; defer to the package
 docs for detail.
 
 ## SpaDES.core — the simulation framework
@@ -11,7 +10,8 @@ queue, and module functions).
 
 - `simInit(times, params, modules, objects, paths)` — construct a `simList`; loads
   modules, runs `.inputObjects`, resolves dependencies.
-- `spades(sim, debug = FALSE)` — run events to the end time; returns the `simList`.
+- `spades(sim, debug = getOption("spades.debug"))` — run events to the end time; returns
+  the `simList`. The option defaults to `1`, which prints one line per event.
 - `defineModule(sim, list(...))` — module metadata (name, version, timeunit, reqdPkgs,
   parameters, inputObjects, outputObjects, documentation, citation).
 - `defineParameter(name, class, default, min, max, desc)` — declare a parameter.
@@ -25,7 +25,8 @@ queue, and module functions).
 ## reproducible — caching and data prep
 
 - `Cache(fn, ...)` — memoize a call by digest of its inputs; skip recompute if unchanged.
-- `prepInputs(url, targetFile, fun, ...)` — download + checksum + post-process a dataset.
+- `prepInputs(targetFile, url, archive, ..., fun, ...)` — download + checksum +
+  post-process a dataset. Caches the download/load steps internally, not `postProcess()`.
 - `preProcess()`, `postProcess()` — the download and spatial post-processing halves.
 
 ## Require — reproducible package management
@@ -36,13 +37,14 @@ queue, and module functions).
 ## SpaDES.tools — spatial algorithms
 
 - `spread()`, `spread2()`, `spread3()` — spatial spreading (fire, disease).
-- `neighbourhood()`, `splitRaster()`, `mergeRaster()`, `distanceFromEachPoint()`.
+- `adj()`, `rings()`, `cir()` (neighbourhoods), `splitRaster()`, `mergeRaster()`,
+  `distanceFromEachPoint()`.
 
 ## Other packages
 
 - `quickPlot` — `Plot()`, `clearPlot()`: fast modular grid-based plotting.
-- `SpaDES.project` — `newProject()`, `newModule()`: scaffolding.
-- `SpaDES.experiment` — `experiment()`, `simInitAndExperiment()`: parameter sweeps,
-  replicates, `simLists`.
+- `SpaDES.core` also scaffolds: `newModule()`, `newProject()`.
+- `SpaDES.project` — `setupProject()` for whole projects, and `experiment()`,
+  `simInitAndExperiment()`, `experimentTmux()`: parameter sweeps, replicates, `simLists`
+  (moved from the archived `SpaDES.experiment`).
 - `SpaDES.config` — R6 project configuration.
-- `pemisc` — miscellaneous Predictive Ecology helpers.

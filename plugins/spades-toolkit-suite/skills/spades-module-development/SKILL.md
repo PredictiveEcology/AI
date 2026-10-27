@@ -37,22 +37,22 @@ names — the toolkit's functions change across versions.
 
 - **`SpaDES.core`** — the framework: `simInit()`, `spades()`, `defineModule()`,
   `defineParameter()`, `expectsInput()`/`createsOutput()`, `scheduleEvent()`, `P(sim)` /
-  `params(sim)`, `mod`, and accessors `time()`/`start()`/`end()`/`events()`/`objs()`.
-- **`SpaDES.tools`** — spatial algorithms: `spread()`/`spread2()`, `neighbourhood()`,
+  `params(sim)`, `mod`, and accessors `time()`/`start()`/`end()`/`events()`/`objs()`;
+  also scaffolding with `newModule()`/`newProject()`.
+- **`SpaDES.tools`** — spatial algorithms: `spread()`/`spread2()`, `adj()`/`rings()`/`cir()`,
   `splitRaster()`/`mergeRaster()`; and more.
 - **`reproducible`** — `Cache()` for memoizing expensive calls; `prepInputs()`
   (`preProcess()`/`postProcess()`) for downloading and preparing external data reproducibly.
 - **`Require`** — reproducible package installation/loading with version and GitHub constraints.
-- **`SpaDES.project`** — scaffolding and whole-project setup: `newModule()`,
-  `newProject()`, `setupProject()`; also holds the parameter-sweep/replicate capabilities
-  formerly in the deprecated `SpaDES.experiment`.
-- **`SpaDES.experiment`** — *deprecated*: its parameter sweeps, replicates, and
+- **`SpaDES.project`** — whole-project setup with `setupProject()`; also holds the
+  parameter-sweep/replicate capabilities formerly in the archived `SpaDES.experiment`.
+- **`SpaDES.experiment`** — *archived*: its parameter sweeps, replicates, and
   multiple-`simList` capabilities have moved to `SpaDES.project`.
 - **`quickPlot`** — fast modular plotting (`Plot()`, `clearPlot()`).
 
 ## Developing a new module
 
-1. **Scaffold** with `SpaDES.project::newModule("<Name>", path)` — creates the module
+1. **Scaffold** with `SpaDES.core::newModule("<Name>", path)` — creates the module
    folder, `.R` skeleton, `.Rmd` manual, `tests/`, and `data/CHECKSUMS.txt`.
 2. **Declare the module's interface first** — its inputs, outputs, and parameters, i.e.
    its contract with other modules — in `defineModule()`: `timeunit`, `reqdPkgs` (pin
@@ -89,7 +89,7 @@ names — the toolkit's functions change across versions.
 - Read/write parameters via `P(sim)$x` (respects `params(sim)` overrides), state via
   `sim$objName`; keep module-local persistent state in `mod`.
 - Use `reproducible::Cache()`/`prepInputs()` and related functions for expensive or downloaded steps; be
-  deliberate about caching stochastic events (generally do not cache them). Note that `prepInputs()` does not cache internally and needs to be combined with `Cache()`.
+  deliberate about caching stochastic events (generally do not cache them). Note that `prepInputs()` caches only its download/load steps internally, not `postProcess()`; wrap the whole call in `Cache()` to cache all of it.
 - Order same-time-step events with numeric `eventPriority` (lower runs first).
 - **For complex event scheduling**, a module can define explicit `eventPriority`
   variables at the top of `doEvent` and reference them in `scheduleEvent()` — clearer and
@@ -143,10 +143,10 @@ design needs, not just what each does:
 Landscape simulations are memory-bound, and some common R idioms leak memory by silently
 capturing large environments. Prefer the following:
 
-- **Avoid `Map()`, `do.call()`, and the `apply` family** (`sapply`/`lapply`/`mapply`/
-  `apply`) — they are less memory-efficient and can leak memory, especially with
-  undeclared (anonymous/inline) functions. **Use the `purrr` family instead** (`map()`,
-  `map2()`, `pmap()`, `walk()`, and their typed variants).
+- **Do not add `purrr` or other tidyverse packages;** use `lapply`/`Map`/`vapply`. A
+  `purrr` lambda captures its environment exactly as an anonymous function passed to
+  `lapply` does, so it saves no memory; the leak to avoid is the closure over a large
+  environment (next bullets).
 - **Avoid `as.formula()`** — it captures its calling environment, dragging every object in
   that environment into memory. Prefer building a `call` (e.g. `call()`/`bquote()`) when a
   formula-like expression is needed.
@@ -205,8 +205,8 @@ change, reason about how it ripples outward.
 
 ## Testing
 
-Scaffold `tests/` include `unitTests.R` + `testthat/`; build small in-memory inputs, call
-`simInit()`/`spades()` (or a helper directly via `sim$.mods$<Module>$<fn>`), and assert on
-the returned `simList`. See `testing` for patterns.
+Tests live in `tests/testthat/` with a `setup.R`; CI converts the module to a package and
+runs `testthat::test_local()`. Build small in-memory inputs, call `simInit()`/`spades()`
+(or a helper directly), and assert on the returned `simList`. See `testing` for patterns.
 
 <!--Note to Ceres: request input from Eliot and Alex.-->

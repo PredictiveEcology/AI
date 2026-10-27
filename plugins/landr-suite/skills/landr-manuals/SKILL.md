@@ -56,7 +56,10 @@ Editing guidance:
 
 ## 2. Multi-module manuals (bookdown, e.g. `LandR-Manual`)
 
-`LandR-Manual/` aggregates selected module manuals into one book.
+`PredictiveEcology/LandR-Manual` aggregates selected module manuals into one book. The
+module sources are not stored in it: the `landr-manual.yaml` workflow checks each module
+out (from `development`, set by `MODULE_REF`) into `modules/<Module>/`, and `build.R`
+generates the chapters with `SpaDES.docs::prepManualRmds()`.
 
 - `index.Rmd` — book front matter (`site: bookdown::bookdown_site`), preface, cover image,
   global bibliography/CSL.
@@ -74,7 +77,7 @@ Editing guidance:
   ```
   The `rmd_files` list is the chapter order; forewords (`LandR-*Foreword.Rmd`) separate
   groups (data modules, validation modules).
-- `_output.yml` — output formats (gitbook/HTML, PDF via krantz.cls).
+- `_output.yml` — output formats (`bookdown::bs4_book` HTML; PDF via krantz.cls).
 - `_common.R` — shared setup run before each chapter.
 - Per-module chapters are not written in `LandR-Manual`. The CI workflow
   (`.github/workflows/landr-manual.yaml`) checks out each module repo (its `development`

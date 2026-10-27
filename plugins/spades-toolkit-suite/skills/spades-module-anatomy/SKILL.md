@@ -17,7 +17,7 @@ couple thousand lines).
 - `<Module>.R` — the module (metadata + events). **Primary file.**
 - `<Module>.Rmd` / `.md` / `.html` — module manual.
 - `R/` — module-local helper functions, sourced into the module during `simInit`.
-- `tests/unitTests.R` + `tests/testthat/` — tests (see `spades-module-development`).
+- `tests/testthat/` with a `setup.R` — tests (see `testing`).
 - `data/` with `CHECKSUMS.txt`, `citations/`, `citation.bib`, `figures/`, `tables/`.
 - `NEWS.md`, `LICENSE`, `README.md`, `<Module>.Rproj`.
 
@@ -103,12 +103,12 @@ doEvent.`<Module>` <- function(sim, eventTime, eventType, debug = FALSE) {
 - **`init` does not need to be scheduled explicitly** — `simInit()`/`spades()` always run it
   first. Likewise **`.inputObjects` is never called explicitly**; it runs automatically
   during `simInit()`.
-- **Only the `init` event may schedule other events for the first time.** Every other event
-  may only *reschedule itself* (or schedule a different event already running in the same
+- **By convention, only the `init` event schedules other events for the first time**
+  (SpaDES does not enforce this). Every other event should only *reschedule itself* (or schedule a different event already running in the same
   module's cycle) — `init` is the one place that must schedule the first instance of every
   other event the module uses.
-- **A module can only schedule its own events.** `scheduleEvent(sim, ..., "<Module>", ...)`
-  must name the current module; scheduling another module's event breaks modularity (the
+- **A module should only schedule its own events** (a convention; `scheduleEvent()` does not
+  check it). `scheduleEvent(sim, ..., "<Module>", ...)` should name the current module; scheduling another module's event breaks modularity (the
   point of the `simList`-object contract is that modules interact only through shared
   objects, never by reaching into each other's event queue).
 

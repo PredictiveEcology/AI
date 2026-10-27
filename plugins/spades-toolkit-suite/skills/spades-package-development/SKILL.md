@@ -1,6 +1,6 @@
 ---
 name: spades-package-development
-description: Developing and maintaining the SpaDES toolkit R packages themselves (SpaDES.core, SpaDES.tools, reproducible, Require, SpaDES.project, SpaDES.experiment, SpaDES.config, quickPlot, and related) — package architecture, exported APIs, dependencies, roxygen2 docs, NAMESPACE, testthat suites, and the devtools/R CMD check release workflow. Use when the user works on the source of a SpaDES package rather than on a SpaDES module or simulation. For building/running modules use spades-module-development; for a module's .R structure use spades-module-anatomy.
+description: Developing and maintaining the SpaDES toolkit R packages themselves (SpaDES.core, SpaDES.tools, reproducible, Require, SpaDES.project, SpaDES.config, quickPlot, and related) — package architecture, exported APIs, dependencies, roxygen2 docs, NAMESPACE, testthat suites, and the devtools/R CMD check release workflow. Use when the user works on the source of a SpaDES package rather than on a SpaDES module or simulation. For building/running modules use spades-module-development; for a module's .R structure use spades-module-anatomy.
 metadata:
   ecosystem: SpaDES
   version: "0.1"
