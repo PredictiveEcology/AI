@@ -11,7 +11,7 @@ metadata:
 The ecosystem has three R packages (each its own folder under `~/GitHub/LandR`):
 
 - `LandR/` — core utilities. Imports `SpaDES.core`, `SpaDES.tools`, `data.table`, `raster`,
-  `reproducible`, `sf`, `sp`, and more. roxygen2 docs; **no testthat suite yet**.
+  `reproducible`, `sf`, `sp`, and more. roxygen2 docs; has `tests/testthat/`.
 - `LandR.CS/` — climate-sensitive growth/mortality; small (2 R files).
 - `fireSenseUtils/` — fire utilities; has `tests/testthat/`.
 
@@ -80,5 +80,3 @@ the accessory packages above — the same alignment concern applies to package v
 
 - `utils::globalVariables(...)` calls at the top of some `R/` files silence
   `data.table` NSE `R CMD check` NOTES — keep them in sync when you add new column names.
-- `LandR` currently has no tests; adding testthat scaffolding
-  (`usethis::use_testthat()`) is a reasonable improvement when asked.
