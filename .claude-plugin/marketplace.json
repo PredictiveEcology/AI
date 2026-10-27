@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "predictiveecology-ai",
+  "owner": {
+    "name": "PredictiveEcology"
+  },
+  "metadata": {
+    "description": "Shared conventions, guidelines, and skills for AI-assisted development on the SpaDES toolkit and LandR forest-landscape model ecosystem.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "landr-suite",
+      "source": "./plugins/landr-suite",
+      "description": "Skills for developing and maintaining the LandR ecosystem: module process code (cohorts, pixel groups, species/ecoregion mechanics), accessory package maintenance (LandR, LandR.CS, fireSenseUtils), and module/bookdown manuals. Builds on the SpaDES toolkit skills in spades-toolkit-suite, used by default alongside it.",
+      "category": "research-software",
+      "keywords": [
+        "landr",
+        "spades",
+        "forest",
+        "simulation",
+        "r"
+      ]
+    },
+    {
+      "name": "spades-toolkit-suite",
+      "source": "./plugins/spades-toolkit-suite",
+      "description": "Skills for developing SpaDES toolkit modules, simulations, and packages in general (not LandR-specific): module anatomy and metadata, the general development workflow, per-module manuals, and toolkit package development.",
+      "category": "research-software",
+      "keywords": [
+        "spades",
+        "simulation",
+        "modules",
+        "r"
+      ]
+    },
+    {
+      "name": "shared-conventions",
+      "source": "./plugins/shared-conventions",
+      "description": "Ecosystem-agnostic skills used across both LandR and the SpaDES toolkit: writing and running tests, and code-level documentation (roxygen2, module metadata, NEWS).",
+      "category": "research-software",
+      "keywords": [
+        "r",
+        "testing",
+        "documentation",
+        "reproducibility"
+      ]
+    }
+  ]
+}

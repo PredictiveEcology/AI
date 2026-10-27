@@ -1,0 +1,25 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.posit/assistant/hooks/session-guardrails.sh"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "bash|read|edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.posit/assistant/hooks/pretool-guardrails.py"
+          }
+        ]
+      }
+    ]
+  }
+}

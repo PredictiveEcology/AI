@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "spades-toolkit-suite",
+  "displayName": "SpaDES Toolkit Development",
+  "version": "0.1.0",
+  "description": "Skills for developing SpaDES toolkit modules, simulations, and packages in general (not LandR-specific): toolkit orientation and routing, module .R structure/metadata/events, the general module development workflow (newModule(), coding against the toolkit, running/debugging a simList), per-module manuals, and developing the SpaDES toolkit packages themselves.",
+  "author": {
+    "name": "PredictiveEcology"
+  },
+  "repository": "https://github.com/PredictiveEcology/AI",
+  "license": "MIT",
+  "keywords": [
+    "spades",
+    "simulation",
+    "modules",
+    "r"
+  ]
+}

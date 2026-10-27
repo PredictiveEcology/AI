@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "shared-conventions",
+  "displayName": "Shared SpaDES/LandR Conventions",
+  "version": "0.1.0",
+  "description": "Ecosystem-agnostic skills used across both LandR and the SpaDES toolkit: writing and running unit and integration tests (tests/unitTests.R, tests/testthat/, simInit()/spades() fixtures), and code-level documentation (in-code comments, module defineModule() metadata, roxygen2, NEWS.md craft).",
+  "author": {
+    "name": "PredictiveEcology"
+  },
+  "repository": "https://github.com/PredictiveEcology/AI",
+  "license": "MIT",
+  "keywords": [
+    "r",
+    "testing",
+    "documentation",
+    "reproducibility"
+  ]
+}
