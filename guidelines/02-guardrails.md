@@ -30,6 +30,11 @@ Key distinctions:
   activate when their `description` matches.
 - **Permission rules are enforced** — `deny` holds even in auto/YOLO modes; grants can
   persist per project/session.
+- **`AGENTS-rules/` is a library, not a fifth mechanism** — short behavioural rules
+  published one per file, which you deliver through `AGENTS.md` or the SessionStart
+  hook. It exists because a memory file is always part team convention and part
+  personal style, so the unit worth sharing is a rule rather than a whole file. See
+  `AGENTS-rules/README.md`.
 - **Hooks are programmable but fail-open** — if a hook errors or times out, the action
   proceeds. A hook is a strong nudge, not an ironclad lock. Global hooks run for every
   project (even untrusted); project hooks need a trusted workspace. Global and project
@@ -40,8 +45,9 @@ Key distinctions:
 | Guardrail nature | Put it in |
 |---|---|
 | "Behave this way" prose (succinctness, style, ecologist-friendly docs, authorship footer, commit sign-off, session-length prompts) | **SessionStart hook** (for always-on user-wide reach) and/or **AGENTS.md** (per project) |
-| Hard block of a dangerous command (`rm -rf`, force-push, blanket `git add`) | **`permission` deny** rules |
-| Force confirmation on a class of actions (`git commit`, outside-project file access) | **`permission` ask** rules and/or a **PreToolUse hook** |
+| A working-practice rule others may or may not want (root-cause discipline, PR brevity, session logs) | A file in **`AGENTS-rules/`**, then pasted into `AGENTS.md` or injected by the SessionStart hook |
+| Hard block of a dangerous command (`rm -rf`, force-push, blanket `git add`) | **`permission` deny** rules — reference content in [`AGENTS-rules/enforced/default/`](../AGENTS-rules/enforced/README.md) |
+| Force confirmation on a class of actions (`git commit`, outside-project file access) | **`permission` ask** rules and/or a **PreToolUse hook** — reference content in `AGENTS-rules/enforced/default/`; optional variants in `AGENTS-rules/enforced/suggested/` |
 | Per-action re-approval (re-ask every time, no persistent grant) | **PreToolUse hook** forcing `ask` (permission grants persist, so a hook is required) |
 | Domain how-to that should load only when relevant | **Skill** |
 
@@ -65,24 +71,13 @@ Settings merge order overall: defaults → global → project → environment va
 
 ## Reference guardrail set (generic)
 
-A recommended starting set of guardrails, described independent of any machine paths.
-The two hook scripts are installed in the platform's global hooks directory (under
-`~/.posit/assistant/hooks/`) and referenced from the global `settings.json`. This set is
-**ecosystem-agnostic** — it serves both LandR and SpaDES toolkit work unchanged.
-
-- **`permission.bash`** — `deny` for destructive commands (`rm -rf|-r|-f *`,
-  `git clean *`, force-push, `git reset --hard`) and blanket staging
-  (`git add -A|.|--all`); `ask` for `git commit*`; `allow` for read-only git
-  (`status`/`diff`/`log`/`show`) and `pwd`.
-- **`permission.edit = ask`**, **`permission.read = allow`**.
-- **SessionStart hook** — injects behavioral rules: outside-project = read-only +
-  re-ask each time, verify working directory, dry-run destructive commands, specific
-  staging, draft + sign off commit messages, be succinct, respect existing style,
-  ecologist-friendly low-jargon docs, Claude authorship footer, and session-length
-  compact/save prompts.
-- **PreToolUse hook** — forces `ask` for outside-project `read`/`edit`/`bash` paths
-  (each time) and for `git commit`; denies un-dry-run destructive commands as a
-  backstop.
+The reference guardrail content — the `permission` block and the two hook scripts —
+now lives in [`AGENTS-rules/enforced/default/`](../AGENTS-rules/enforced/README.md) as
+plain files to copy into `settings.json`, rather than being described inline here. It
+is **ecosystem-agnostic** — it serves both LandR and SpaDES toolkit work unchanged.
+`AGENTS-rules/enforced/suggested/` additionally offers optional guard scripts (e.g. an
+`.R`-files-via-shell-only hook, a generated-files guard, a long-run interlock) — take
+any subset.
 
 The assistant can **instantiate** this set on the user's behalf (draft the `permission`
 rules and hook references, show the diff for sign-off, back up `settings.json`); the

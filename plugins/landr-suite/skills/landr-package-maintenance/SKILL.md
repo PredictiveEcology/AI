@@ -55,6 +55,27 @@ check("LandR")        # full R CMD check
   `PredictiveEcology/LandR@development (>= 1.1.0.9006)`); when you raise a package's
   minimum required version, check whether dependent modules need their pins updated.
 
+### Module version alignment across the ecosystem
+
+This applies to LandR **modules** (their own `version` field in `defineModule()`), not just
+the accessory packages above — the same alignment concern applies to package versions too.
+
+- **Major and minor module versions need to stay aligned across the modules in a given
+  workflow/pipeline** (e.g. the `Biomass_*` family, or a `fireSense_*` fit/predict pair).
+  A patch/dev bump to one module can require bumping the `version` of sibling modules that
+  did not themselves change, purely so the set advertises a consistent major.minor line.
+- **Never bump an unchanged module's version without first checking compatibility** between
+  it and the module(s) that did change. A version bump is a claim about compatibility, not
+  just a label — bumping it without verifying compatibility is misleading.
+- **Module integration tests are the primary tool for this check** (see the `testing`
+  skill's integration-test guidance): run the relevant multi-module chain
+  (`simInit()`/`spades()` across the modules involved) before bumping, and again after, to
+  confirm the updated and not-yet-updated modules still interoperate through their shared
+  `simList` objects.
+- If a compatibility problem turns up, **stop and flag it to the user** rather than bumping
+  anyway — this is a decision about the ecosystem's release consistency, not a mechanical
+  version-string edit.
+
 ## Notes
 
 - `utils::globalVariables(...)` calls at the top of some `R/` files silence

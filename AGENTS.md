@@ -42,7 +42,8 @@ these guidelines" section in `guidelines/00-user-setup.md`. Treat any `*.local.m
 as personal and machine-bound.
 
 **Shared skills.** Team skills are the primary source and should be obtained before
-writing new ones. They live in this repo (`PredictiveEcology/AI`, in `skills/`) and are
+writing new ones. They live in this repo (`PredictiveEcology/AI`, in `plugins/`) and are
+installed by the user as plugins from its marketplace (`/plugin`), or, as a fallback,
 cloned/synced into a local skills path (e.g. `~/.agents/skills` or
 `~/.posit/assistant/skills/`). See `guidelines/03-skills.md`.
 
@@ -57,6 +58,15 @@ A LandR project folder (e.g. `~/GitHub/LandR`) holds the **LandR** ecosystem: a 
 dynamics at large landscape scales (vegetation succession, wildfire, climate change,
 carbon). It is a working directory that collects many independent module and package
 repositories side by side — it is **not** itself a single git repository.
+
+**Hierarchy: LandR is an application built on the SpaDES toolkit, not part of it.**
+`SpaDES`/`SpaDES.core` and its companion packages (see the "SpaDES toolkit" section below)
+are the general-purpose discrete-event simulation framework; LandR modules and accessory
+packages are one model system written *using* that framework, specific to forest-landscape
+simulation. Toolkit changes can affect any model system built on it; LandR-specific changes
+(cohort data, species/ecoregion mechanics, `Biomass_*`/`fireSense_*` process logic) affect
+only LandR. Keep this direction of dependency in mind when tracing a change's blast radius
+or deciding which skill applies.
 
 To learn model basics, read the `LandR-Manual/` bookdown (start at
 `LandR-Manual/index.Rmd`). The SpaDES toolkit itself is documented at
@@ -79,6 +89,11 @@ LandR is open source: anyone can write their own modules and link them to these.
 the actual repository set for the workspace at hand (see `guidelines/01-project-setup.md`)
 rather than assuming the families below are exhaustive.
 
+- **Module versions**: major/minor versions must stay aligned across modules in a workflow
+  (e.g. the `Biomass_*` family), so an unrelated module may need a version bump just to keep
+  pace — but only after confirming compatibility with modules that did change, primarily via
+  module integration tests. See `landr-package-maintenance`'s "Module version alignment"
+  section.
 - **Modules** (`<project>/<ModuleName>/`) — SpaDES module folders. Common core families:
   - `Biomass_*` — forest biomass succession (LANDIS-II–style): flagship `Biomass_core`,
     data-prep (`Biomass_borealDataPrep`, `Biomass_speciesData`, `Biomass_sppEcoreg*`),
@@ -278,7 +293,7 @@ first.
 ## Skills (shared set)
 
 Team skills are the primary source — obtain them before writing new ones (shared repo
-`PredictiveEcology/AI`, in `skills/`, synced into a local skills path such as
+`PredictiveEcology/AI`, in `plugins/`, installed as plugins via `/plugin`, or synced into a local skills path such as
 `~/.agents/skills`). See `guidelines/03-skills.md`.
 
 - `testing` — unit + integration tests (`tests/testthat/`, in-memory inputs, asserting on
