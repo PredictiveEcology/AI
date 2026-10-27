@@ -79,19 +79,22 @@ generates the chapters with `SpaDES.docs::prepManualRmds()`.
   groups (data modules, validation modules).
 - `_output.yml` — output formats (`bookdown::bs4_book` HTML; PDF via krantz.cls).
 - `_common.R` — shared setup run before each chapter.
-- Chapter sources `_manual_rmds/<Module>2.Rmd` are generated from each module's own
-  `.Rmd` by `prepManualRmds()` during the build and deleted afterwards. Edit the module's
-  `.Rmd`, not these.
+- Per-module chapters are not written in `LandR-Manual`. The CI workflow
+  (`.github/workflows/landr-manual.yaml`) checks out each module repo (its `development`
+  branch) into `modules/<Module>/`, and `build.R` calls `SpaDES.docs::prepManualRmds()`, which
+  copies each module's own `.Rmd` into `_manual_rmds/` as the `2` suffix variants (e.g.
+  `Biomass_core2.Rmd`), adapted for inclusion in the book. To change a chapter, edit the
+  module's own `.Rmd` in its repo.
 
 ### Adding a module to `LandR-Manual`
 
-1. Add an `actions/checkout` step for the module to `.github/workflows/landr-manual.yaml`
-   (path `modules/<Module>`).
-2. Add `_manual_rmds/<Module>2.Rmd` to `rmd_files` in `_bookdown.yml` at the desired
-   position (under the appropriate foreword).
+1. Make the module's own `.Rmd` manual-ready in its repo (`##` or deeper headings, anchors and
+   chunk labels prefixed so they are unique across the book).
+2. Add a checkout step for the module to `.github/workflows/landr-manual.yaml`, and its
+   `_manual_rmds/<Module>2.Rmd` path to `rmd_files` in `_bookdown.yml` at the desired position
+   (under the appropriate foreword).
 3. Ensure its bibliography entries are available to the book's global bib/CSL.
-4. Build with `source("build.R")`, which runs `bookdown::render_book()`; output goes to
-   `docs/`.
+4. Build with `bookdown::render_book()` (see `build.R`); output goes to `docs/`.
 
 Keep heading levels consistent so chapters nest correctly, and reuse text references for
 figure/table captions that must survive PDF rendering.
