@@ -1,6 +1,6 @@
 ---
 name: testing
-description: Writing and running tests for SpaDES modules, toolkit packages, and simulation model accessory packages (e.g. LandR/LandR.CS/fireSenseUtils) — both unit tests (a single module, event, or helper function) and integration tests (multi-module workflows). Covers the tests/unitTests.R + tests/testthat/ layout, building minimal in-memory rasters and data.tables, calling simInit()/spades(), reaching module-internal functions, and asserting on the returned simList. Use when the user asks to add, fix, or run tests for a module, simulation, or package. For the CI workflows that run module tests on a PR, use spades-module-ci.
+description: Writing and running tests for SpaDES modules, toolkit packages, and simulation model accessory packages (e.g. LandR/LandR.CS/fireSenseUtils) — both unit tests (a single module, event, or helper function) and integration tests (multi-module workflows). Covers the tests/testthat/ layout and how CI runs it, building minimal in-memory rasters and data.tables, calling simInit()/spades(), reaching module-internal functions, and asserting on the returned simList. Use when the user asks to add, fix, or run tests for a module, simulation, or package. For the CI workflows that run module tests on a PR, use spades-module-ci.
 metadata:
   ecosystem: SpaDES, LandR
   version: "1.1"
@@ -20,18 +20,12 @@ conventions in the target module or package rather than imposing new ones.
 
 ## Module test layout
 
-- `tests/unitTests.R` — entry point that runs the suite:
-  ```r
-  # run all tests in the folder:
-  test_dir("../<Module>/tests/testthat")
-  # or a single file:
-  test_file("../<Module>/tests/testthat/test-<name>.R")
-  ```
+- `tests/testthat/setup.R` — shared setup for the suite (from the module template).
 - `tests/testthat/test-<name>.R` — one file per function or event, named after the thing
   tested, e.g. `test-<helperFn>.R`, `test-<Module>Init.R`.
 
 Read an existing test in the target module before writing a new one, to match its fixtures
-and style. In LandR, `Biomass_core` is the richest reference (~21 test files).
+and style. In LandR, `Biomass_core` is the richest reference (10 test files).
 
 ## Building minimal inputs
 
@@ -121,7 +115,12 @@ suite yet.
 
 ## Running tests
 
-- Module: source `tests/unitTests.R`, or `testthat::test_dir("<Module>/tests/testthat")`.
+- Module: CI (`testthat-module.yaml`, calling the shared
+  `PredictiveEcology/actions/.github/workflows/testthat-module.yaml@main`) converts the
+  module to a package with `SpaDES.core::convertToPackage()` and runs
+  `testthat::test_local()` on it. Run it the same way locally when tests call
+  module-internal functions; `testthat::test_file()` on a single file works for
+  self-contained tests.
 - Package: `devtools::test("<Package>")`.
 - Run from a context where the module's `reqdPkgs` (or the package's dependencies) are
   installed; use `Require()` to load them.
