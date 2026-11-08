@@ -9,7 +9,7 @@ skills (the first option), how to create a new one only when needed, where skill
 (remote and local), and how loading and precedence work.
 
 > **Shared skills location.** The shared skills live in the `AI` repo
-> (https://github.com/PredictiveEcology/AI), packaged as three Claude-Code-compatible
+> (https://github.com/PredictiveEcology/AI), packaged as four Claude-Code-compatible
 > plugins under `plugins/` (`landr-suite`, `spades-toolkit-suite`, `shared-conventions`),
 > catalogued in the repo-root marketplace `.claude-plugin/marketplace.json`
 > (marketplace name `predictiveecology-ai`). **Installing via the plugin marketplace is
@@ -39,6 +39,8 @@ toolkit-specific.
 | `landr-code-development` | Implementing/changing simulation processes and LandR-specific mechanisms (cohorts, pixel groups, species/ecoregion); builds on `spades-module-development`. |
 | `landr-package-maintenance` | Maintaining LandR/LandR.CS/fireSenseUtils packages. |
 | `landr-manuals` | LandR module `.Rmd` manuals and multi-module bookdown manuals. |
+| `landr-running-and-data` | Running LandR/Biomass_* modules: `dataYear` consistency, SCANFI years and the vegetation-year offset, land cover, species tables, integration branches. |
+| `biomass-core-cohort-rules` | Developing Biomass_core cohort and establishment rules: judging by cohorts per species per pixel, why suppressed stacks form, rules tested and ruled out. |
 
 **SpaDES toolkit skills** — used **by default** in LandR work, alongside the LandR skills:
 
@@ -49,6 +51,17 @@ toolkit-specific.
 | `spades-module-development` | General dev workflow: `newModule()`, coding against the toolkit, running/debugging a `simList`. |
 | `spades-module-manuals` | Per-module SpaDES manuals. **Placeholder, not yet written** — use `landr-manuals` for LandR module manuals meanwhile. |
 | `spades-package-development` | Developing the SpaDES toolkit packages themselves (APIs, NAMESPACE, devtools, versioning). **Stub, not yet populated.** |
+| `spades-running-projects` | Operating SpaDES projects and campaigns: launching, stopping and restarting runs, installing into live runs, caching as a user, HPC/Slurm traps, diagnosing slow or hung runs. |
+| `spades-module-caching` | What an event/`.inputObjects` cache key holds and restores; `.cacheExtra`, declaring inputs, diagnosing misses and stale hits. |
+| `spades-module-contract` | Module metadata contract: `reqdPkgs`, own parameters and `.globals`, `Plots()`, verbosity never computes, parent modules and child branches. |
+
+**fireSense skills** (plugin `firesense-suite`):
+
+| Skill | Purpose |
+|---|---|
+| `firesense-overview` | What a fireSense run does: parent module and children, `doFit`, ledgers and spatial fit reuse, refits, fire data and causes. |
+| `firesense-spread-fitting` | Fitting the spread model with DEoptim: link, objective, whole-landscape spread, stop rule, compute; what was ruled out. |
+| `firesense-hindcast-validation` | Validating a fire model by hindcast: in-sample first, observed side on the fit's definitions, medians with single-run ranges. |
 
 For LandR tasks, the LandR skills take precedence where a topic overlaps with a SpaDES
 skill (e.g. `landr-code-development` over `spades-module-development` for process logic);
@@ -144,8 +157,8 @@ plugin from a prompt. If asked, walk the user through them.
    `PredictiveEcology/AI`.
 2. **Browse and install the plugin(s) needed** from that menu: `landr-suite` for LandR
    work, `spades-toolkit-suite` for SpaDES toolkit work (used by default alongside
-   `landr-suite` too), and `shared-conventions` always. There is no bundle/dependency
-   chain between the three; install any subset directly.
+   `landr-suite` too), `firesense-suite` for fireSense work, and `shared-conventions`
+   always. There is no bundle/dependency chain between them; install any subset directly.
 3. **Verify:** ask the assistant *"What skills are currently available to you?"*; the
    installed plugins' skill names (e.g. `landr-overview`, `testing`) should appear.
 4. **Update after the marketplace content changes:** the user reopens `/plugin` and

@@ -14,9 +14,10 @@ related code. It holds four things:
   `00b-user-guidelines.md` (working *with* the assistant), `01-project-setup.md`
   (project folder + repo set), `02-guardrails.md` (permissions, hooks, `AGENTS.md`), and
   `03-skills.md` (getting, creating, and loading skills).
-- **`plugins/`** — the shared team skills, packaged as three Claude-Code-compatible
+- **`plugins/`** — the shared team skills, packaged as four Claude-Code-compatible
   plugins: `shared-conventions` (ecosystem-agnostic: `testing`, `code-documentation`),
-  `landr-suite` (LandR-specific), and `spades-toolkit-suite` (SpaDES-toolkit-specific).
+  `landr-suite` (LandR-specific), `spades-toolkit-suite` (SpaDES-toolkit-specific), and
+  `firesense-suite` (the fireSense fire model).
   Catalogued in the repo-root marketplace (`predictiveecology-ai`,
   `.claude-plugin/marketplace.json`). These are the primary source; get them before
   writing new ones.
@@ -42,6 +43,9 @@ project repos.
 - Working on **LandR** modules/packages → the LandR section of `AGENTS.md`, the
   `landr-*` skills, plus the shared skills and the SpaDES toolkit skills (used by default
   in LandR work).
+
+- Working on or with **fireSense** → the `firesense-*` skills, plus the LandR and SpaDES
+  toolkit skills.
 
 - Everything in `guidelines/` applies regardless of ecosystem.
 
@@ -76,7 +80,7 @@ remain responsible for the instructions and content it is given, so read them to
 ## Getting the skills
 
 "Skills" are add-on instruction packs that teach the assistant how to work on SpaDES and
-LandR code. This repo bundles them as three plugins (see `plugins/`) that you install once.
+LandR code. This repo bundles them as four plugins (see `plugins/`) that you install once.
 
 The easiest way is to install them from inside Posit Assistant:
 

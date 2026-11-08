@@ -63,6 +63,9 @@ The SpaDES `spades-*` skills below come from the sister repo `SpaDES.ai` and are
 | Author LandR module `.Rmd` manuals or multi-module bookdown manuals | `landr-manuals` |
 | Author a SpaDES module's own `.Rmd` manual | `spades-module-manuals` *(placeholder — until written, use `landr-manuals`)* |
 | Write comments, module metadata `desc` fields, roxygen2, NEWS | `code-documentation` |
+| Set up or run LandR modules: `dataYear`, SCANFI years, land cover, species tables, integration branches | `landr-running-and-data` |
+| Change or judge Biomass_core cohort and establishment rules | `biomass-core-cohort-rules` |
+| Run, fit or validate fireSense fire modules | `firesense-overview`, `firesense-spread-fitting`, `firesense-hindcast-validation` |
 
 Always prefer inspecting the actual files (module `.R`, `DESCRIPTION`, `tests/`) before
 acting — the ecosystem is large and modules vary.
