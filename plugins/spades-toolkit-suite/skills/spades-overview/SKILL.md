@@ -56,6 +56,9 @@ cheat-sheet. In brief:
 | Write unit or integration tests | `testing` |
 | Write comments, module metadata `desc` fields, roxygen2, NEWS | `code-documentation` |
 | Author a per-module `.Rmd` manual | `spades-module-manuals` |
+| Launch, stop, restart or install into SpaDES runs; a run is slow, hung or recomputing | `spades-running-projects` |
+| Add caching to module code, or a cached run is stale or re-runs | `spades-module-caching` |
+| Module metadata contract: `reqdPkgs`, own parameters and `.globals`, `Plots()`, parent modules | `spades-module-contract` |
 
 Always prefer inspecting the actual files (module `.R`, `DESCRIPTION`, `tests/`) and the
 real function definitions before acting — the toolkit is large and evolves across versions.
