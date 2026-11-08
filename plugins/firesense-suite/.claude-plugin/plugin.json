@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "firesense-suite",
+  "displayName": "fireSense Fire Model",
+  "version": "0.1.0",
+  "description": "Skills for running and developing the fireSense family of SpaDES fire modules (fireSense_ELFs, dataPrep, ignition, spread, burn, summary) and its packages (fireSenseUtils, clusters, fireregimetools): what a run does and how fits are stored and reused in ledgers, spread-model fitting with DEoptim, ignition and escape models, and hindcast validation against observed fire regimes.",
+  "author": {
+    "name": "PredictiveEcology"
+  },
+  "repository": "https://github.com/PredictiveEcology/AI",
+  "license": "MIT",
+  "keywords": [
+    "firesense",
+    "fire",
+    "spades",
+    "landr",
+    "deoptim",
+    "validation",
+    "r"
+  ]
+}
